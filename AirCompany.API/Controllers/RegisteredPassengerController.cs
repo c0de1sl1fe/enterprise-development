@@ -1,42 +1,87 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using AirCompany.API.DTO;
+using AirCompany.API.Services;
+using AirCompany.Domain.Entities;
 
 namespace AirCompany.API.Controllers;
 
+/// <summary>
+/// Контроллер для управления зарегистрированными пассажирами 
+/// </summary>
+/// <param name="registeredPassengerService">Репозиторий для работы с зарегистрированными пассажирами</param>
 [Route("api/[controller]")]
 [ApiController]
-public class RegisteredPassengerController : ControllerBase
+public class RegisteredPassengerController(
+    IService<RegisteredPassengerDto, RegisteredPassenger> registeredPassengerService) : ControllerBase
 {
-    // GET: api/<RegisteredPassengerController>
+    /// <summary>
+    /// Возвращает список всех зарегистрированных пассажиров
+    /// </summary>
+    /// <returns>Список зарегистрированных пассажиров</returns>
     [HttpGet]
-    public IEnumerable<string> Get()
+    public ActionResult<IEnumerable<RegisteredPassenger>> Get()
     {
-        return new string[] { "value1", "value2" };
+        return Ok(registeredPassengerService.GetAll());
     }
 
-    // GET api/<RegisteredPassengerController>/5
+    /// <summary>
+    /// Возвращает зарегистрированного пассажира по идентификатору
+    /// </summary>
+    /// <param name="id">Идентификатор зарегистрированного пассажира</param>
+    /// <returns>Зарегистрированный пассажир или "Не найдено"</returns>
     [HttpGet("{id}")]
-    public string Get(int id)
+    public ActionResult<RegisteredPassenger> Get(int id)
     {
-        return "value";
+        var result = registeredPassengerService.GetById(id);
+        if (result == null)
+            return NotFound();
+
+        return Ok(result);
     }
 
-    // POST api/<RegisteredPassengerController>
+    /// <summary>
+    /// Добавляет нового зарегистрированного пассажира 
+    /// </summary>
+    /// <param name="value">Информация о новом зарегистрированном пассажире</param>
+    /// <returns>Добавленный зарегистрированный пассажир или "Плохой запрос"</returns>
     [HttpPost]
-    public void Post([FromBody] string value)
+    public ActionResult<RegisteredPassenger> Post([FromBody] RegisteredPassengerDto value)
     {
+        var result = registeredPassengerService.Post(value);
+        if (result == null)
+            return BadRequest();
+
+        return Ok(result);
     }
 
-    // PUT api/<RegisteredPassengerController>/5
+    /// <summary>
+    /// Изменяет зарегистрированного пассажира по идентификатору
+    /// </summary>
+    /// <param name="id">Идентификатор зарегистрированного пассажира</param>
+    /// <param name="value">Обновлённая информация о зарегистрированном пассажире</param>
+    /// <returns>Результат операции</returns>
     [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
+    public ActionResult Put(int id, [FromBody] RegisteredPassengerDto value)
     {
+        var result = registeredPassengerService.Put(id, value);
+        if (!result)
+            return BadRequest();
+
+        return Ok();
     }
 
-    // DELETE api/<RegisteredPassengerController>/5
+    /// <summary>
+    /// Удаляет зарегистрированного пассажира по идентификатору 
+    /// </summary>
+    /// <param name="id">Идентификатор зарегистрированного пассажира</param>
+    /// <returns>Результат операции</returns>
     [HttpDelete("{id}")]
-    public void Delete(int id)
+    public ActionResult Delete(int id)
     {
+        var result = registeredPassengerService.Delete(id);
+        if (!result)
+            return NotFound();
+
+        return Ok();
     }
 }

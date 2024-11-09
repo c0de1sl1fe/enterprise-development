@@ -1,42 +1,86 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+﻿using AirCompany.API.Services;
+using Microsoft.AspNetCore.Mvc;
+using AirCompany.API.DTO;
+using AirCompany.Domain.Entities;
 
 namespace AirCompany.API.Controllers;
 
+/// <summary>
+/// Контроллер для управления самолетами 
+/// </summary>
+/// <param name="aircraftService">Репозиторий для работы с самолетами</param>
 [Route("api/[controller]")]
 [ApiController]
-public class AircraftController : ControllerBase
+public class AircraftController(IService<AircraftDto, Aircraft> aircraftService) : ControllerBase
 {
-    // GET: api/<AircraftController>
+    /// <summary>
+    /// Возвращает список всех самолетов
+    /// </summary>
+    /// <returns>Список самолетов</returns>
     [HttpGet]
-    public IEnumerable<string> Get()
+    public ActionResult<IEnumerable<Aircraft>> Get()
     {
-        return new string[] { "value1", "value2" };
+        return Ok(aircraftService.GetAll());
     }
 
-    // GET api/<AircraftController>/5
+    /// <summary>
+    /// Возвращает самолет по идентификатору
+    /// </summary>
+    /// <param name="id">Идентификатор самолета</param>
+    /// <returns>Самолет или "Не найдено"</returns>
     [HttpGet("{id}")]
-    public string Get(int id)
+    public ActionResult<Aircraft> Get(int id)
     {
-        return "value";
+        var result = aircraftService.GetById(id);
+        if (result == null)
+            return NotFound();
+
+        return Ok(result);
     }
 
-    // POST api/<AircraftController>
+    /// <summary>
+    /// Добавляет новый самолет 
+    /// </summary>
+    /// <param name="value">Информация о новом самолете</param>
+    /// <returns>Добавленный самолет или "Плохой запрос"</returns>
     [HttpPost]
-    public void Post([FromBody] string value)
+    public ActionResult<Aircraft> Post([FromBody] AircraftDto value)
     {
+        var result = aircraftService.Post(value);
+        if (result == null)
+            return BadRequest();
+
+        return Ok(result);
     }
 
-    // PUT api/<AircraftController>/5
+    /// <summary>
+    /// Изменяет самолет по идентификатору
+    /// </summary>
+    /// <param name="id">Идентификатор самолета</param>
+    /// <param name="value">Обновлённая информация о самолете</param>
+    /// <returns>Результат операции</returns>
     [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
+    public ActionResult Put(int id, [FromBody] AircraftDto value)
     {
+        var result = aircraftService.Put(id, value);
+        if (!result)
+            return BadRequest();
+
+        return Ok();
     }
 
-    // DELETE api/<AircraftController>/5
+    /// <summary>
+    /// Удаляет самолет по идентификатору 
+    /// </summary>
+    /// <param name="id">Идентификатор самолета</param>
+    /// <returns>Результат операции</returns>
     [HttpDelete("{id}")]
-    public void Delete(int id)
+    public ActionResult Delete(int id)
     {
+        var result = aircraftService.Delete(id);
+        if (!result)
+            return NotFound();
+
+        return Ok();
     }
 }
