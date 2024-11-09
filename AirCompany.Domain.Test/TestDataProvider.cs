@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using AirCompany.Domain.Entities;
 
 namespace AirCompany.Domain.Test;
 
