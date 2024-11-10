@@ -3,53 +3,37 @@ namespace AirCompany.Domain.Entities;
 /// <summary>
 /// Представляет информацию о рейсе.
 /// </summary>
-/// <param name="id">Уникальный идентификатор рейса.</param>
-/// <param name="number">Номер рейса.</param>
-/// <param name="departurePoint">Место отправления рейса.</param>
-/// <param name="arrivalPoint">Место назначения рейса.</param>
-/// <param name="departureDate">Дата и время отправления рейса.</param>
-/// <param name="arrivalDate">Дата и время прибытия рейса.</param>
-/// <param name="aircraftType">Тип самолета, используемого для рейса.</param>
-/// <param name="passengers">Список пассажиров, зарегистрированных на рейс.</param>
-public class Flight(
-    int id,
-    string? number,
-    string? departurePoint,
-    string? arrivalPoint,
-    DateTime? departureDate,
-    DateTime? arrivalDate,
-    Aircraft? aircraftType,
-    List<Passenger>? passengers)
+public class Flight
 {
     /// <summary>
     /// Уникальный идентификатор рейса.
     /// </summary>
-    public required int Id { get; set; } = id;
+    public required int Id { get; set; }
 
     /// <summary>
     /// Номер рейса.
     /// </summary>
-    public string? Number { get; set; } = number;
+    public string? Number { get; set; }
 
     /// <summary>
     /// Место отправления рейса.
     /// </summary>
-    public string? DeparturePoint { get; set; } = departurePoint;
+    public string? DeparturePoint { get; set; }
 
     /// <summary>
     /// Место назначения рейса.
     /// </summary>
-    public string? ArrivalPoint { get; set; } = arrivalPoint;
+    public string? ArrivalPoint { get; set; }
 
     /// <summary>
     /// Дата и время отправления рейса.
     /// </summary>
-    public DateTime? DepartureDate { get; set; } = departureDate;
+    public DateTime? DepartureDate { get; set; }
 
     /// <summary>
     /// Дата и время прибытия рейса.
     /// </summary>
-    public DateTime? ArrivalDate { get; set; } = arrivalDate;
+    public DateTime? ArrivalDate { get; set; }
 
     /// <summary>
     /// Время отправления рейса.
@@ -59,15 +43,39 @@ public class Flight(
     /// <summary>
     /// Продолжительность рейса.
     /// </summary>
-    public TimeSpan? Duration => (DepartureDate.HasValue && ArrivalDate.HasValue) ? ArrivalDate.Value - DepartureDate.Value : null;
+    public TimeSpan? Duration => (DepartureDate.HasValue && ArrivalDate.HasValue)
+        ? ArrivalDate.Value - DepartureDate.Value
+        : null;
 
     /// <summary>
     /// Тип самолета, используемого для рейса.
     /// </summary>
-    public Aircraft? AircraftType { get; set; } = aircraftType;
+    public Aircraft? AircraftType { get; set; }
 
     /// <summary>
-    /// Список пассажиров, зарегистрированных на рейс.
+    /// Список зарегистрированных пассажиров на рейс.
     /// </summary>
-    public List<Passenger>? Passengers { get; set; } = passengers;
+    public List<RegisteredPassenger>? Passengers { get; set; }
+
+    // Конструктор по умолчанию
+    public Flight()
+    {
+        Id = -1;
+        Passengers = new List<RegisteredPassenger>();
+    }
+
+    // Конструктор с параметрами
+    public Flight(int id, string? number = null, string? departurePoint = null, string? arrivalPoint = null,
+        DateTime? departureDate = null, DateTime? arrivalDate = null,
+        Aircraft? aircraftType = null, List<RegisteredPassenger>? passengers = null)
+    {
+        Id = id;
+        Number = number;
+        DeparturePoint = departurePoint;
+        ArrivalPoint = arrivalPoint;
+        DepartureDate = departureDate;
+        ArrivalDate = arrivalDate;
+        AircraftType = aircraftType;
+        Passengers = passengers;
+    }
 }

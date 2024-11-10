@@ -2,7 +2,7 @@ using AirCompany.Domain.Entities;
 
 namespace AirCompany.Domain.Repositories;
 
-public class FlightsRepository : IRepository<Flight>
+public class FlightRepository : IRepository<Flight>
 {
     private readonly List<Flight> _flights = [];
 

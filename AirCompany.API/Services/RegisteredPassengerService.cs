@@ -10,7 +10,11 @@ namespace AirCompany.API.Services;
 /// Сервис для управления данными о зарегистрированных пассажирах.
 /// Реализует интерфейс IService для выполнения операций CRUD с зарегистрированными пассажирами.
 /// </summary>
-public class RegisteredPassengerService(IRepository<RegisteredPassenger> registeredPassengerRepository, IMapper mapper)
+public class RegisteredPassengerService(
+    IRepository<RegisteredPassenger> registeredPassengerRepository,
+    IRepository<Flight> flightRepository,
+    IRepository<Passenger> passengerRepository,
+    IMapper mapper)
     : IService<RegisteredPassengerDto, RegisteredPassenger>
 {
     private int _id = 1;
@@ -54,6 +58,8 @@ public class RegisteredPassengerService(IRepository<RegisteredPassenger> registe
     {
         var registeredPassenger = mapper.Map<RegisteredPassenger>(entity);
         registeredPassenger.Id = _id++;
+        registeredPassenger.Passenger = passengerRepository.GetById(entity.PassengerId);
+        registeredPassenger.Flight = flightRepository.GetById(entity.FlightId);
         return registeredPassengerRepository.Post(registeredPassenger);
     }
 

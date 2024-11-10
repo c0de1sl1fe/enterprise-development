@@ -9,7 +9,11 @@ namespace AirCompany.API.Services;
 /// Сервис для управления данными о рейсах.
 /// Реализует интерфейс IService для выполнения операций CRUD с рейсами.
 /// </summary>
-public class FlightService(IRepository<Flight> flightRepository, IMapper mapper) : IService<FlightDto, Flight>
+public class FlightService(
+    IRepository<Flight> flightRepository,
+    IRepository<Aircraft> aircraftRepository,
+    IRepository<RegisteredPassenger> registeredPassengerRepository,
+    IMapper mapper) : IService<FlightDto, Flight>
 {
     private int _id = 1;
 
@@ -52,6 +56,20 @@ public class FlightService(IRepository<Flight> flightRepository, IMapper mapper)
     {
         var flight = mapper.Map<Flight>(entity);
         flight.Id = _id++;
+        flight.AircraftType = aircraftRepository.GetById(entity.AircraftTypeId);
+        foreach (RegisteredPassenger passenger in flight.Passengers)
+        {
+            var newPassenger = registeredPassengerRepository.GetById(passenger.Id);
+            if (newPassenger != null)
+            {
+                passenger.Number = newPassenger.Number;
+                passenger.SeatNumber = newPassenger.SeatNumber;
+                passenger.LuggageWeight = newPassenger.LuggageWeight;
+                passenger.Flight = newPassenger.Flight;
+                passenger.Passenger = newPassenger.Passenger;
+            }
+        }
+
         return flightRepository.Post(flight);
     }
 

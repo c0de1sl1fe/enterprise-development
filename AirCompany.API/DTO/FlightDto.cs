@@ -6,11 +6,6 @@ namespace AirCompany.API.DTO;
 public class FlightDto
 {
     /// <summary>
-    /// Уникальный идентификатор рейса.
-    /// </summary>
-    public int Id { get; set; }
-
-    /// <summary>
     /// Номер рейса.
     /// </summary>
     public string? Number { get; set; }
@@ -49,4 +44,9 @@ public class FlightDto
     /// Идентификатор типа самолета, используемого для рейса.
     /// </summary>
     public int AircraftTypeId { get; set; }
+
+    /// <summary>
+    /// Список идентификаторов зарегистрированных на рейс пассажиров.
+    /// </summary>
+    public List<int>? Passengers { get; set; }
 }

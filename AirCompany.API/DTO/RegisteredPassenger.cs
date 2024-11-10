@@ -24,10 +24,10 @@ public class RegisteredPassengerDto
     /// <summary>
     /// Идентификатор рейса, на который зарегистрирован пассажир.
     /// </summary>
-    public int? FlightId { get; set; }
+    public int FlightId { get; set; }
 
     /// <summary>
     /// Идентификатор пассажира, зарегистрированного на рейс.
     /// </summary>
-    public int? PassengerId { get; set; }
+    public int PassengerId { get; set; }
 }

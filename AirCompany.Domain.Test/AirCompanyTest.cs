@@ -53,11 +53,10 @@ public class AirCompanyTest(TestDataProvider testDataProvider) : IClassFixture<T
     public void TestTop5FlightsByPassengerCount()
     {
         var top5Flights = _testDataProvider.flights
-            .GroupBy(f => f)
-            .OrderByDescending(g => g.Sum(f => f.Passengers!.Count))
+            .OrderByDescending(f => f.Passengers.Count)
             .Take(5)
-            .Select(g => g.Key)
             .ToList();
+
         Assert.Equal(5, top5Flights.Count);
         Assert.Equal(_testDataProvider.flights[3], top5Flights[0]);
         Assert.Equal(_testDataProvider.flights[0], top5Flights[1]);
@@ -93,8 +92,8 @@ public class AirCompanyTest(TestDataProvider testDataProvider) : IClassFixture<T
             .Where(f => f.DeparturePoint == departurePoint)
             .ToList();
 
-        var averageLoad = flightsFromPoint.Average(f => f.Passengers!.Count);
-        var maxLoad = flightsFromPoint.Max(f => f.Passengers!.Count);
+        var averageLoad = flightsFromPoint.Average(f => f.Passengers.Count);
+        var maxLoad = flightsFromPoint.Max(f => f.Passengers.Count);
         
         Assert.Equal(4, averageLoad);
         Assert.Equal(4, maxLoad);
