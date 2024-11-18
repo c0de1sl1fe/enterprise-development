@@ -11,7 +11,7 @@ namespace AirCompany.API.Controllers;
 /// <param name="queryService">Сервис для запросов</param>
 [Route("api/[controller]")]
 [ApiController]
-public class QueryController(QueryService queryService) : ControllerBase
+public class QueryController(IQueryService queryService) : ControllerBase
 {
     /// <summary>
     /// Возвращает список всех авиарейсов, вылетевших из указанного пункта отправления в указанный пункт прибытия

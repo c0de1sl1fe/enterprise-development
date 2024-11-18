@@ -30,7 +30,7 @@ public class Mapping : Profile
                 src.ArrivalDate,
                 null,
                null) { Id = 0 })
-            .ForMember(dest => dest.Passengers, opt => opt.MapFrom(src => src.Passengers.Select(id => new RegisteredPassenger { Id = id }))); // Преобразуем идентификаторы в объекты RegisteredPassenger
+            .ForMember(dest => dest.Passengers, opt => opt.MapFrom(src => src.Passengers!.Select(id => new RegisteredPassenger { Id = id }))); // Преобразуем идентификаторы в объекты RegisteredPassenger
             
 
         CreateMap<Passenger, PassengerDto>().ReverseMap()

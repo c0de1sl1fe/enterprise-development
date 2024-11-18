@@ -1,6 +1,5 @@
 using AutoMapper;
 using AirCompany.API.DTO;
-using AirCompany.Domain;
 using AirCompany.Domain.Entities;
 using AirCompany.Domain.Repositories;
 

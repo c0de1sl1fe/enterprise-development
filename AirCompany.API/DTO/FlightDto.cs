@@ -29,17 +29,7 @@ public class FlightDto
     /// Дата и время прибытия рейса.
     /// </summary>
     public DateTime? ArrivalDate { get; set; }
-
-    /// <summary>
-    /// Время отправления рейса.
-    /// </summary>
-    public TimeOnly? DepartureTime => DepartureDate.HasValue ? TimeOnly.FromDateTime(DepartureDate.Value) : null;
-
-    /// <summary>
-    /// Продолжительность рейса.
-    /// </summary>
-    public TimeSpan? Duration => (DepartureDate.HasValue && ArrivalDate.HasValue) ? ArrivalDate.Value - DepartureDate.Value : null;
-
+    
     /// <summary>
     /// Идентификатор типа самолета, используемого для рейса.
     /// </summary>

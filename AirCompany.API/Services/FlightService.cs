@@ -57,16 +57,19 @@ public class FlightService(
         var flight = mapper.Map<Flight>(entity);
         flight.Id = _id++;
         flight.AircraftType = aircraftRepository.GetById(entity.AircraftTypeId);
-        foreach (RegisteredPassenger passenger in flight.Passengers)
+        if (flight.Passengers != null)
         {
-            var newPassenger = registeredPassengerRepository.GetById(passenger.Id);
-            if (newPassenger != null)
+            foreach (var passenger in flight.Passengers)
             {
-                passenger.Number = newPassenger.Number;
-                passenger.SeatNumber = newPassenger.SeatNumber;
-                passenger.LuggageWeight = newPassenger.LuggageWeight;
-                passenger.Flight = newPassenger.Flight;
-                passenger.Passenger = newPassenger.Passenger;
+                var newPassenger = registeredPassengerRepository.GetById(passenger.Id);
+                if (newPassenger != null)
+                {
+                    passenger.Number = newPassenger.Number;
+                    passenger.SeatNumber = newPassenger.SeatNumber;
+                    passenger.LuggageWeight = newPassenger.LuggageWeight;
+                    passenger.Flight = newPassenger.Flight;
+                    passenger.Passenger = newPassenger.Passenger;
+                }
             }
         }
 
