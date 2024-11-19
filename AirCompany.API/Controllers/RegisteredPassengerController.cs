@@ -12,14 +12,14 @@ namespace AirCompany.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 public class RegisteredPassengerController(
-    IService<RegisteredPassengerDto, RegisteredPassenger> registeredPassengerService) : ControllerBase
+    IService<RegisteredPassengerDto, RegisteredPassengerFullDto> registeredPassengerService) : ControllerBase
 {
     /// <summary>
     /// Возвращает список всех зарегистрированных пассажиров
     /// </summary>
     /// <returns>Список зарегистрированных пассажиров</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<RegisteredPassenger>> Get()
+    public ActionResult<IEnumerable<RegisteredPassengerFullDto>> Get()
     {
         return Ok(registeredPassengerService.GetAll());
     }
@@ -30,7 +30,7 @@ public class RegisteredPassengerController(
     /// <param name="id">Идентификатор зарегистрированного пассажира</param>
     /// <returns>Зарегистрированный пассажир или "Не найдено"</returns>
     [HttpGet("{id}")]
-    public ActionResult<RegisteredPassenger> Get(int id)
+    public ActionResult<RegisteredPassengerFullDto> Get(int id)
     {
         var result = registeredPassengerService.GetById(id);
         if (result == null)
@@ -45,7 +45,7 @@ public class RegisteredPassengerController(
     /// <param name="value">Информация о новом зарегистрированном пассажире</param>
     /// <returns>Добавленный зарегистрированный пассажир или "Плохой запрос"</returns>
     [HttpPost]
-    public ActionResult<RegisteredPassenger> Post([FromBody] RegisteredPassengerDto value)
+    public ActionResult<RegisteredPassengerFullDto> Post([FromBody] RegisteredPassengerDto value)
     {
         var result = registeredPassengerService.Post(value);
         if (result == null)

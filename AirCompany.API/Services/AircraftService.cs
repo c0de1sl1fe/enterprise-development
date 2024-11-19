@@ -9,7 +9,8 @@ namespace AirCompany.API.Services;
 /// Сервис для управления данными о самолетах.
 /// Реализует интерфейс IService для выполнения операций CRUD с самолетами.
 /// </summary>
-public class AircraftService(IRepository<Aircraft> aircraftRepository, IMapper mapper) : IService<AircraftDto, Aircraft>
+public class AircraftService(IRepository<Aircraft> aircraftRepository, IMapper mapper)
+    : IService<AircraftDto, AircraftFullDto>
 {
     private int _id = 1;
 
@@ -27,32 +28,32 @@ public class AircraftService(IRepository<Aircraft> aircraftRepository, IMapper m
     /// Получает список всех самолетов.
     /// </summary>
     /// <returns>Перечисление всех самолетов.</returns>
-    public IEnumerable<Aircraft> GetAll()
+    public IEnumerable<AircraftFullDto> GetAll()
     {
-        return aircraftRepository.GetAll();
+        return aircraftRepository.GetAll().Select(mapper.Map<AircraftFullDto>);
     }
 
     /// <summary>
-    /// Получает самолет по указанному идентификатору.
+    /// Получает full-dto самолета по указанному идентификатору.
     /// </summary>
     /// <param name="id">Идентификатор самолета.</param>
-    /// <returns>Самолет с указанным идентификатором или null, если не найден.</returns>
-    public Aircraft? GetById(int id)
+    /// <returns> Full-dto самолета с указанным идентификатором или null, если не найден.</returns>
+    public AircraftFullDto? GetById(int id)
     {
         var aircraft = aircraftRepository.GetById(id);
-        return aircraft;
+        return mapper.Map<AircraftFullDto>(aircraft);
     }
 
     /// <summary>
     /// Добавляет новый самолет.
     /// </summary>
     /// <param name="entity">DTO объекта самолета для добавления.</param>
-    /// <returns>Добавленный самолет или null, если добавление не удалось.</returns>
-    public Aircraft? Post(AircraftDto entity)
+    /// <returns> Full-dto добавленного самолета или null, если добавление не удалось.</returns>
+    public AircraftFullDto? Post(AircraftDto entity)
     {
         var aircraft = mapper.Map<Aircraft>(entity);
         aircraft.Id = _id++;
-        return aircraftRepository.Post(aircraft);
+        return mapper.Map<AircraftFullDto>(aircraftRepository.Post(aircraft));
     }
 
     /// <summary>

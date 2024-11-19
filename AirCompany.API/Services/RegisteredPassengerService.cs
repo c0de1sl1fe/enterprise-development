@@ -14,7 +14,7 @@ public class RegisteredPassengerService(
     IRepository<Flight> flightRepository,
     IRepository<Passenger> passengerRepository,
     IMapper mapper)
-    : IService<RegisteredPassengerDto, RegisteredPassenger>
+    : IService<RegisteredPassengerDto, RegisteredPassengerFullDto>
 {
     private int _id = 1;
 
@@ -32,34 +32,55 @@ public class RegisteredPassengerService(
     /// Получает список всех зарегистрированных пассажиров.
     /// </summary>
     /// <returns>Перечисление всех зарегистрированных пассажиров.</returns>
-    public IEnumerable<RegisteredPassenger> GetAll()
+    public IEnumerable<RegisteredPassengerFullDto> GetAll()
     {
-        return registeredPassengerRepository.GetAll();
+        return registeredPassengerRepository.GetAll().Select(mapper.Map<RegisteredPassengerFullDto>);
     }
 
     /// <summary>
     /// Получает зарегистрированного пассажира по указанному идентификатору.
     /// </summary>
     /// <param name="id">Идентификатор зарегистрированного пассажира.</param>
-    /// <returns>Зарегистрированный пассажир с указанным идентификатором или null, если не найден.</returns>
-    public RegisteredPassenger? GetById(int id)
+    /// <returns>Full-dto зарегистрированного пассажира с указанным идентификатором или null, если не найден.</returns>
+    public RegisteredPassengerFullDto? GetById(int id)
     {
         var registeredPassenger = registeredPassengerRepository.GetById(id);
-        return registeredPassenger;
+        if (registeredPassenger == null) return null;
+
+        var registeredPassengerFullDto = mapper.Map<RegisteredPassengerFullDto>(registeredPassenger);
+        if (registeredPassenger.Passenger != null)
+        {
+            registeredPassengerFullDto.Passenger =
+                mapper.Map<PassengerFullDto>(passengerRepository.GetById(registeredPassenger.Passenger.Id));
+        }
+
+        if (registeredPassenger.Flight != null)
+        {
+            registeredPassengerFullDto.Flight =
+                mapper.Map<FlightFullDto>(flightRepository.GetById(registeredPassenger.Flight.Id));
+        }
+
+        return registeredPassengerFullDto;
     }
 
     /// <summary>
     /// Добавляет нового зарегистрированного пассажира.
     /// </summary>
     /// <param name="entity">DTO объекта зарегистрированного пассажира для добавления.</param>
-    /// <returns>Добавленный зарегистрированный пассажир или null, если добавление не удалось.</returns>
-    public RegisteredPassenger? Post(RegisteredPassengerDto entity)
+    /// <returns>Full-dto добавленного зарегистрированного пассажира или null, если добавление не удалось.</returns>
+    public RegisteredPassengerFullDto? Post(RegisteredPassengerDto entity)
     {
         var registeredPassenger = mapper.Map<RegisteredPassenger>(entity);
+        if (registeredPassenger == null) return null;
         registeredPassenger.Id = _id++;
-        registeredPassenger.Passenger = passengerRepository.GetById(entity.PassengerId);
-        registeredPassenger.Flight = flightRepository.GetById(entity.FlightId);
-        return registeredPassengerRepository.Post(registeredPassenger);
+        var registeredPassengerFullDto =
+            mapper.Map<RegisteredPassengerFullDto>(registeredPassengerRepository.Post(registeredPassenger));
+        if (entity.Passenger != null)
+            registeredPassengerFullDto.Passenger =
+                mapper.Map<PassengerFullDto>(passengerRepository.GetById(entity.Passenger.Id));
+        if (entity.Flight != null)
+            registeredPassengerFullDto.Flight = mapper.Map<FlightFullDto>(flightRepository.GetById(entity.Flight.Id));
+        return registeredPassengerFullDto;
     }
 
     /// <summary>

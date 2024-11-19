@@ -11,14 +11,14 @@ namespace AirCompany.API.Controllers;
 /// <param name="passengerService">Репозиторий для работы с пассажирами</param>
 [Route("api/[controller]")]
 [ApiController]
-public class PassengerController(IService<PassengerDto, Passenger> passengerService) : ControllerBase
+public class PassengerController(IService<PassengerDto, PassengerFullDto> passengerService) : ControllerBase
 {
     /// <summary>
     /// Возвращает список всех пассажиров
     /// </summary>
     /// <returns>Список пассажиров</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<Passenger>> Get()
+    public ActionResult<IEnumerable<PassengerFullDto>> Get()
     {
         return Ok(passengerService.GetAll());
     }
@@ -29,7 +29,7 @@ public class PassengerController(IService<PassengerDto, Passenger> passengerServ
     /// <param name="id">Идентификатор пассажира</param>
     /// <returns>Пассажир или "Не найдено"</returns>
     [HttpGet("{id}")]
-    public ActionResult<Passenger> Get(int id)
+    public ActionResult<PassengerFullDto> Get(int id)
     {
         var result = passengerService.GetById(id);
         if (result == null)
@@ -44,7 +44,7 @@ public class PassengerController(IService<PassengerDto, Passenger> passengerServ
     /// <param name="value">Информация о новом пассажире</param>
     /// <returns>Добавленный пассажир или "Плохой запрос"</returns>
     [HttpPost]
-    public ActionResult<Passenger> Post([FromBody] PassengerDto value)
+    public ActionResult<PassengerFullDto> Post([FromBody] PassengerDto value)
     {
         var result = passengerService.Post(value);
         if (result == null)

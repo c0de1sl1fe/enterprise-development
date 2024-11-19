@@ -20,7 +20,7 @@ public class QueryController(IQueryService queryService) : ControllerBase
     /// <param name="arrival">Пункт прибытия</param>
     /// <returns>Список авиарейсов</returns>
     [HttpGet("flights")]
-    public ActionResult<List<Flight>> GetFlights(string departure, string arrival)
+    public ActionResult<List<FlightFullDto>> GetFlights(string departure, string arrival)
     {
         var flights = queryService.GetFlightsByDepartureAndArrival(departure, arrival);
         return Ok(flights);
@@ -32,7 +32,7 @@ public class QueryController(IQueryService queryService) : ControllerBase
     /// <param name="flightId">Идентификатор рейса</param>
     /// <returns>Список пассажиров</returns>
     [HttpGet("passengers/no-baggage")]
-    public ActionResult<List<RegisteredPassenger>> GetPassengersWithNoBaggage(int flightId)
+    public ActionResult<List<RegisteredPassengerFullDto>> GetPassengersWithNoBaggage(int flightId)
     {
         var passengers = queryService.GetPassengersWithNoBaggage(flightId);
         return Ok(passengers);
@@ -69,7 +69,7 @@ public class QueryController(IQueryService queryService) : ControllerBase
     /// </summary>
     /// <returns>Список рейсов с минимальным временем в пути</returns>
     [HttpGet("flights/min-duration")]
-    public ActionResult<List<Flight>> GetFlightsWithMinimumDuration()
+    public ActionResult<List<FlightFullDto>> GetFlightsWithMinimumDuration()
     {
         var flights = queryService.GetFlightsWithMinimumDuration();
         return Ok(flights);

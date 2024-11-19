@@ -11,14 +11,14 @@ namespace AirCompany.API.Controllers;
 /// <param name="flightService">Репозиторий для работы с рейсами</param>
 [Route("api/[controller]")]
 [ApiController]
-public class FlightController(IService<FlightDto, Flight> flightService) : ControllerBase
+public class FlightController(IService<FlightDto, FlightFullDto> flightService) : ControllerBase
 {
     /// <summary>
     /// Возвращает список всех рейсов
     /// </summary>
     /// <returns>Список рейсов</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<Flight>> Get()
+    public ActionResult<IEnumerable<FlightFullDto>> Get()
     {
         return Ok(flightService.GetAll());
     }
@@ -29,7 +29,7 @@ public class FlightController(IService<FlightDto, Flight> flightService) : Contr
     /// <param name="id">Идентификатор рейса</param>
     /// <returns>Рейс или "Не найдено"</returns>
     [HttpGet("{id}")]
-    public ActionResult<Flight> Get(int id)
+    public ActionResult<FlightFullDto> Get(int id)
     {
         var result = flightService.GetById(id);
         if (result == null)
@@ -44,7 +44,7 @@ public class FlightController(IService<FlightDto, Flight> flightService) : Contr
     /// <param name="value">Информация о новом рейсе</param>
     /// <returns>Добавленный рейс или "Плохой запрос"</returns>
     [HttpPost]
-    public ActionResult<Flight> Post([FromBody] FlightDto value)
+    public ActionResult<FlightFullDto> Post([FromBody] FlightDto value)
     {
         var result = flightService.Post(value);
         if (result == null)

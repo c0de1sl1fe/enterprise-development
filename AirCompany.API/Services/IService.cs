@@ -3,29 +3,29 @@ namespace AirCompany.API.Services;
 /// <summary>
 /// Интерфейс для сервисов сущностей
 /// </summary>
-/// <typeparam name="Dt">Тип сущности Dto</typeparam>
-/// <typeparam name="T">Тип сущности</typeparam>
-public interface IService<Dt, T> 
+/// <typeparam name="DT">Тип сущности Dto</typeparam>
+/// <typeparam name="FDT">Тип сущности полная-Dto</typeparam>
+public interface IService<DT, FDT>
 {
     /// <summary>
     /// Получение всех сущностей
     /// </summary>
     /// <returns>Список сущностей</returns>
-    public IEnumerable<T> GetAll();
+    public IEnumerable<FDT> GetAll();
 
     /// <summary>
     /// Получение сущности по идентификатору 
     /// </summary>
     /// <param name="id">Идентификатор сущности</param>
     /// <returns>Сущность с выбранным идентификатором</returns>
-    public T? GetById(int id);
+    public FDT? GetById(int id);
 
     /// <summary>
     /// Добавление сущности
     /// </summary>
     /// <param name="entity">Новая сущность</param>
     /// <returns>Добавленная сущность</returns>
-    public T? Post(Dt entity);
+    public FDT? Post(DT entity);
 
     /// <summary>
     /// Обновляет сущность по идентификатору 
@@ -33,7 +33,7 @@ public interface IService<Dt, T>
     /// <param name="id">Идентификатор сущности</param>
     /// <param name="entity">Новая сущность</param>
     /// <returns>Результат операции</returns>
-    public bool Put(int id, Dt entity);
+    public bool Put(int id, DT entity);
 
     /// <summary>
     /// Удаляет сущность по идентификатору 

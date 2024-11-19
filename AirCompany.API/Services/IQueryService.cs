@@ -4,7 +4,7 @@ using AirCompany.API.DTO;
 namespace AirCompany.API.Services
 {
     /// <summary>
-    /// Интерфейс для сервиса запросов к данным о авиарейсах и пассажирах
+    /// Интерфейс для сервиса запросов к данным об авиарейсах и пассажирах
     /// </summary>
     public interface IQueryService
     {
@@ -14,7 +14,7 @@ namespace AirCompany.API.Services
         /// <param name="departure">Пункт отправления</param>
         /// <param name="arrival">Пункт прибытия</param>
         /// <returns>Список авиарейсов</returns>
-        List<Flight> GetFlightsByDepartureAndArrival(string departure, string arrival);
+        List<FlightFullDto> GetFlightsByDepartureAndArrival(string departure, string arrival);
 
         /// <summary>
         /// Выводит сведения обо всех пассажирах, летящих данным рейсом, вес багажа которых равен нулю, упорядочить по ФИО
@@ -42,7 +42,7 @@ namespace AirCompany.API.Services
         /// Выводит список рейсов с минимальным временем в пути
         /// </summary>
         /// <returns>Список рейсов с минимальным временем в пути</returns>
-        List<Flight> GetFlightsWithMinimumDuration();
+        List<FlightFullDto> GetFlightsWithMinimumDuration();
 
         /// <summary>
         /// Выводит информацию о средней и максимальной загрузке авиарейсов из заданного пункта отправления

@@ -1,11 +1,15 @@
 namespace AirCompany.API.DTO;
 
-
 /// <summary>
-/// Представляет зарегистрированного пассажира на рейсе для передачи данных.
+/// Представляет полную информацию о зарегистрированном пассажире на рейсе для передачи данных.
 /// </summary>
-public class RegisteredPassengerDto
+public class RegisteredPassengerFullDto
 {
+    /// <summary>
+    /// Идентификатор зарегистрированного пассажира.
+    /// </summary>
+    public int Id { get; set; }
+
     /// <summary>
     /// Номер зарегистрированного пассажира.
     /// </summary>

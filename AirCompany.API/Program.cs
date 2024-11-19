@@ -16,10 +16,10 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-builder.Services.AddSingleton<IService<AircraftDto, Aircraft>, AircraftService>();
-builder.Services.AddSingleton<IService<FlightDto, Flight>, FlightService>();
-builder.Services.AddSingleton<IService<PassengerDto, Passenger>, PassengerService>();
-builder.Services.AddSingleton<IService<RegisteredPassengerDto, RegisteredPassenger>, RegisteredPassengerService>();
+builder.Services.AddSingleton<IService<AircraftDto, AircraftFullDto>, AircraftService>();
+builder.Services.AddSingleton<IService<FlightDto, FlightFullDto>, FlightService>();
+builder.Services.AddSingleton<IService<PassengerDto, PassengerFullDto>, PassengerService>();
+builder.Services.AddSingleton<IService<RegisteredPassengerDto, RegisteredPassengerFullDto>, RegisteredPassengerService>();
 builder.Services.AddSingleton<IQueryService, QueryService>();
 builder.Services.AddSingleton<IRepository<Aircraft>, AircraftRepository>();
 builder.Services.AddSingleton<IRepository<Flight>, FlightRepository>();

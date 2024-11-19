@@ -1,10 +1,15 @@
 namespace AirCompany.API.DTO;
 
 /// <summary>
-/// Представляет информацию о рейсе для передачи данных.
+/// Представляет полную информацию о рейсе для передачи данных.
 /// </summary>
-public class FlightDto
+public class FlightFullDto
 {
+    /// <summary>
+    /// Идентификатор рейса.
+    /// </summary>
+    public int Id { get; set; }
+
     /// <summary>
     /// Номер рейса.
     /// </summary>
@@ -34,4 +39,9 @@ public class FlightDto
     /// Идентификатор типа самолета, используемого для рейса.
     /// </summary>
     public int AircraftTypeId { get; set; }
+
+    /// <summary>
+    /// Список идентификаторов зарегистрированных на рейс пассажиров.
+    /// </summary>
+    public List<RegisteredPassengerFullDto>? Passengers { get; set; }
 }

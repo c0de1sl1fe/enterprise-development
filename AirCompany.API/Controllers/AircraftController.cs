@@ -11,14 +11,14 @@ namespace AirCompany.API.Controllers;
 /// <param name="aircraftService">Репозиторий для работы с самолетами</param>
 [Route("api/[controller]")]
 [ApiController]
-public class AircraftController(IService<AircraftDto, Aircraft> aircraftService) : ControllerBase
+public class AircraftController(IService<AircraftDto, AircraftFullDto> aircraftService) : ControllerBase
 {
     /// <summary>
     /// Возвращает список всех самолетов
     /// </summary>
     /// <returns>Список самолетов</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<Aircraft>> Get()
+    public ActionResult<IEnumerable<AircraftFullDto>> Get()
     {
         return Ok(aircraftService.GetAll());
     }
@@ -29,7 +29,7 @@ public class AircraftController(IService<AircraftDto, Aircraft> aircraftService)
     /// <param name="id">Идентификатор самолета</param>
     /// <returns>Самолет или "Не найдено"</returns>
     [HttpGet("{id}")]
-    public ActionResult<Aircraft> Get(int id)
+    public ActionResult<AircraftFullDto> Get(int id)
     {
         var result = aircraftService.GetById(id);
         if (result == null)
@@ -44,7 +44,7 @@ public class AircraftController(IService<AircraftDto, Aircraft> aircraftService)
     /// <param name="value">Информация о новом самолете</param>
     /// <returns>Добавленный самолет или "Плохой запрос"</returns>
     [HttpPost]
-    public ActionResult<Aircraft> Post([FromBody] AircraftDto value)
+    public ActionResult<AircraftFullDto> Post([FromBody] AircraftDto value)
     {
         var result = aircraftService.Post(value);
         if (result == null)

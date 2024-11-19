@@ -10,7 +10,7 @@ namespace AirCompany.API.Services;
 /// Реализует интерфейс IService для выполнения операций CRUD с пассажирами.
 /// </summary>
 public class PassengerService(IRepository<Passenger> passengerRepository, IMapper mapper)
-    : IService<PassengerDto, Passenger>
+    : IService<PassengerDto, PassengerFullDto>
 {
     private int _id = 1;
 
@@ -28,32 +28,32 @@ public class PassengerService(IRepository<Passenger> passengerRepository, IMappe
     /// Получает список всех пассажиров.
     /// </summary>
     /// <returns>Перечисление всех пассажиров.</returns>
-    public IEnumerable<Passenger> GetAll()
+    public IEnumerable<PassengerFullDto> GetAll()
     {
-        return passengerRepository.GetAll();
+        return passengerRepository.GetAll().Select(mapper.Map<PassengerFullDto>);
     }
 
     /// <summary>
-    /// Получает пассажира по указанному идентификатору.
+    /// Получает full-dto пассажира по указанному идентификатору.
     /// </summary>
     /// <param name="id">Идентификатор пассажира.</param>
-    /// <returns>Пассажир с указанным идентификатором или null, если не найден.</returns>
-    public Passenger? GetById(int id)
+    /// <returns>Full-dto пассажира с указанным идентификатором или null, если не найден.</returns>
+    public PassengerFullDto? GetById(int id)
     {
         var passenger = passengerRepository.GetById(id);
-        return passenger;
+        return mapper.Map<PassengerFullDto>(passenger);
     }
 
     /// <summary>
     /// Добавляет нового пассажира.
     /// </summary>
     /// <param name="entity">DTO объекта пассажира для добавления.</param>
-    /// <returns>Добавленный пассажир или null, если добавление не удалось.</returns>
-    public Passenger? Post(PassengerDto entity)
+    /// <returns>Full-dto добавленного пассажира или null, если добавление не удалось.</returns>
+    public PassengerFullDto? Post(PassengerDto entity)
     {
         var passenger = mapper.Map<Passenger>(entity);
         passenger.Id = _id++;
-        return passengerRepository.Post(passenger);
+        return mapper.Map<PassengerFullDto>(passengerRepository.Post(passenger));
     }
 
     /// <summary>
