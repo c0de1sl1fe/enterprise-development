@@ -2,13 +2,15 @@ using System.Reflection;
 using AirCompany.API;
 using AirCompany.API.DTO;
 using AirCompany.API.Services;
+using AirCompany.Domain;
 using AirCompany.Domain.Entities;
 using AirCompany.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddControllers();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -16,17 +18,19 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-builder.Services.AddSingleton<IService<AircraftDto, AircraftFullDto>, AircraftService>();
-builder.Services.AddSingleton<IService<FlightDto, FlightFullDto>, FlightService>();
-builder.Services.AddSingleton<IService<PassengerDto, PassengerFullDto>, PassengerService>();
-builder.Services.AddSingleton<IService<RegisteredPassengerDto, RegisteredPassengerFullDto>, RegisteredPassengerService>();
-builder.Services.AddSingleton<IQueryService, QueryService>();
-builder.Services.AddSingleton<IRepository<Aircraft>, AircraftRepository>();
-builder.Services.AddSingleton<IRepository<Flight>, FlightRepository>();
-builder.Services.AddSingleton<IRepository<Passenger>, PassengerRepository>();
-builder.Services.AddSingleton<IRepository<RegisteredPassenger>, RegisteredPassengerRepository>();
+builder.Services.AddScoped<IService<AircraftDto, AircraftFullDto>, AircraftService>();
+builder.Services.AddScoped<IService<FlightDto, FlightFullDto>, FlightService>();
+builder.Services.AddScoped<IService<PassengerDto, PassengerFullDto>, PassengerService>();
+builder.Services.AddScoped<IService<RegisteredPassengerDto, RegisteredPassengerFullDto>, RegisteredPassengerService>();
+builder.Services.AddScoped<IQueryService, QueryService>();
 
-builder.Services.AddControllers();
+builder.Services.AddScoped<IRepository<Aircraft>, AircraftRepository>();
+builder.Services.AddScoped<IRepository<Flight>, FlightRepository>();
+builder.Services.AddScoped<IRepository<Passenger>, PassengerRepository>();
+builder.Services.AddScoped<IRepository<RegisteredPassenger>, RegisteredPassengerRepository>();
+
+builder.Services.AddDbContext<AirCompanyContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Postgre")));
 
 builder.Services.AddAutoMapper(typeof(Mapping));
 

@@ -22,8 +22,8 @@ public class RegisteredPassengerRepository(AirCompanyContext context, IRepositor
 
     public RegisteredPassenger? Post(RegisteredPassenger entity)
     {
-        var flight = flightRepository.GetById(entity.Flight?.Id ?? -1);
-        var passenger = passengerRepository.GetById(entity.Passenger?.Id ?? -1);
+        var flight = flightRepository.GetById(entity.FlightId);
+        var passenger = passengerRepository.GetById(entity.PassengerId);
         
         if (flight == null || passenger == null)
             return null;
@@ -38,9 +38,9 @@ public class RegisteredPassengerRepository(AirCompanyContext context, IRepositor
         var oldRegisteredPassenger = GetById(id);
         if (oldRegisteredPassenger == null)
             return false;
-
-        var flight = flightRepository.GetById(entity.Flight?.Id ?? -1);
-        var passenger = passengerRepository.GetById(entity.Passenger?.Id ?? -1);
+        
+        var flight = flightRepository.GetById(entity.FlightId);
+        var passenger = passengerRepository.GetById(entity.PassengerId);
         
         if (flight == null || passenger == null)
             return false;

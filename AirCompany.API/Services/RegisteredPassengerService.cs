@@ -16,8 +16,6 @@ public class RegisteredPassengerService(
     IMapper mapper)
     : IService<RegisteredPassengerDto, RegisteredPassengerFullDto>
 {
-    private int _id = 1;
-
     /// <summary>
     /// Удаляет зарегистрированного пассажира по указанному идентификатору.
     /// </summary>
@@ -72,7 +70,6 @@ public class RegisteredPassengerService(
     {
         var registeredPassenger = mapper.Map<RegisteredPassenger>(entity);
         if (registeredPassenger == null) return null;
-        registeredPassenger.Id = _id++;
         var registeredPassengerFullDto =
             mapper.Map<RegisteredPassengerFullDto>(registeredPassengerRepository.Post(registeredPassenger));
         if (entity.Passenger != null)

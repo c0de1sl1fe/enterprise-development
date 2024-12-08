@@ -40,10 +40,15 @@ public class Aircraft
     [Column("max_passengers")]
     public int? MaxPassengers { get; set; }
 
+    /// <summary>
+    /// Список рейсов, связанных с данным самолетом.
+    /// </summary>
+    [NotMapped]
+    public List<Flight>? Flights { get; set; } // Навигационное свойство
+
     // Конструктор по умолчанию
     public Aircraft()
     {
-        Id = 1;
     }
 
     // Конструктор с параметрами

@@ -12,8 +12,6 @@ namespace AirCompany.API.Services;
 public class PassengerService(IRepository<Passenger> passengerRepository, IMapper mapper)
     : IService<PassengerDto, PassengerFullDto>
 {
-    private int _id = 1;
-
     /// <summary>
     /// Удаляет пассажира по указанному идентификатору.
     /// </summary>
@@ -52,7 +50,6 @@ public class PassengerService(IRepository<Passenger> passengerRepository, IMappe
     public PassengerFullDto? Post(PassengerDto entity)
     {
         var passenger = mapper.Map<Passenger>(entity);
-        passenger.Id = _id++;
         return mapper.Map<PassengerFullDto>(passengerRepository.Post(passenger));
     }
 

@@ -32,7 +32,6 @@ public class Passenger
     // Конструктор по умолчанию
     public Passenger()
     {
-        Id = -1;
         RegisteredPassengers = new List<RegisteredPassenger>();
     }
 

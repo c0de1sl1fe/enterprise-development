@@ -61,8 +61,13 @@ public class Flight
     /// <summary>
     /// Тип самолета, используемого для рейса.
     /// </summary>
-    [ForeignKey("AircraftType")]
     public Aircraft? AircraftType { get; set; }
+
+    /// <summary>
+    /// Идентификатор типа самолета.
+    /// </summary>
+    [ForeignKey("AircraftType")]
+    public int AircraftTypeId { get; set; } // Добавлено
 
     /// <summary>
     /// Список зарегистрированных пассажиров на рейс.
@@ -72,11 +77,9 @@ public class Flight
     // Конструктор по умолчанию
     public Flight()
     {
-        Id = -1;
         Passengers = new List<RegisteredPassenger>();
     }
-
-    // Конструктор с параметрами
+    
     public Flight(int id, string? number = null, string? departurePoint = null, string? arrivalPoint = null,
         DateTime? departureDate = null, DateTime? arrivalDate = null,
         Aircraft? aircraftType = null, List<RegisteredPassenger>? passengers = null)

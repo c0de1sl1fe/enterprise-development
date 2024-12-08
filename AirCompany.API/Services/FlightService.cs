@@ -15,8 +15,6 @@ public class FlightService(
     IRepository<RegisteredPassenger> registeredPassengerRepository,
     IMapper mapper) : IService<FlightDto, FlightFullDto>
 {
-    private int _id = 1;
-
     /// <summary>
     /// Удаляет рейс по указанному идентификатору.
     /// </summary>
@@ -64,7 +62,6 @@ public class FlightService(
     public FlightFullDto? Post(FlightDto entity)
     {
         var flight = mapper.Map<Flight>(entity);
-        flight.Id = _id++;
         return mapper.Map<FlightFullDto>(flightRepository.Post(flight));
     }
 

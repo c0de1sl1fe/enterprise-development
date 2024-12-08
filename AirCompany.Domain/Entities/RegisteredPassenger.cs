@@ -33,24 +33,33 @@ public class RegisteredPassenger
     /// </summary>
     [Column("luggage_weight")]
     public double? LuggageWeight { get; set; }
- 
+
     /// <summary>
     /// Рейс, на который зарегистрирован пассажир.
     /// </summary>
-    [ForeignKey("Flight")]
     public Flight? Flight { get; set; }
 
     /// <summary>
     /// Пассажир, зарегистрированный на рейс.
     /// </summary>
-    [ForeignKey("Passenger")]
     public Passenger? Passenger { get; set; }
 
-    // Конструктор по умолчанию
+    /// <summary>
+    /// Идентификатор рейса.
+    /// </summary>
+    [ForeignKey("Flight")]
+    public int FlightId { get; set; } // Добавлено
+
+    /// <summary>
+    /// Идентификатор пассажира.
+    /// </summary>
+    [ForeignKey("Passenger")]
+    public int PassengerId { get; set; } // Добавлено
+
     public RegisteredPassenger()
     {
-        Id = -1;    
     }
+
 
     // Конструктор с параметрами
     public RegisteredPassenger(int id, string? number = null, string? seatNumber = null, double? luggageWeight = null, Flight? flight = null, Passenger? passenger = null)
@@ -62,4 +71,12 @@ public class RegisteredPassenger
         Flight = flight;
         Passenger = passenger;
     }
+
+	public RegisteredPassenger(int id, string? number = null, string? seatNumber = null, double? luggageWeight = null)
+	{
+		Id = id;
+		Number = number;
+		SeatNumber = seatNumber;
+		LuggageWeight = luggageWeight;
+	}
 }

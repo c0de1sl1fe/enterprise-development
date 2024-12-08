@@ -22,7 +22,7 @@ public class FlightRepository(AirCompanyContext context, IRepository<Aircraft> a
 
     public Flight? Post(Flight entity)
     {
-        var aircraft = aircraftRepository.GetById(entity.AircraftType?.Id ?? -1);
+        var aircraft = aircraftRepository.GetById(entity.AircraftTypeId);
         if (aircraft == null)
             return null;
 
@@ -37,7 +37,7 @@ public class FlightRepository(AirCompanyContext context, IRepository<Aircraft> a
         if (oldFlight == null)
             return false;
 
-        var aircraft = aircraftRepository.GetById(entity.AircraftType?.Id ?? -1);
+        var aircraft = aircraftRepository.GetById(entity.AircraftTypeId);
         if (aircraft == null)
             return false;
 

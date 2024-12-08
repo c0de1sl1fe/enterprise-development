@@ -12,8 +12,6 @@ namespace AirCompany.API.Services;
 public class AircraftService(IRepository<Aircraft> aircraftRepository, IMapper mapper)
     : IService<AircraftDto, AircraftFullDto>
 {
-    private int _id = 1;
-
     /// <summary>
     /// Удаляет самолет по указанному идентификатору.
     /// </summary>
@@ -52,7 +50,6 @@ public class AircraftService(IRepository<Aircraft> aircraftRepository, IMapper m
     public AircraftFullDto? Post(AircraftDto entity)
     {
         var aircraft = mapper.Map<Aircraft>(entity);
-        aircraft.Id = _id++;
         return mapper.Map<AircraftFullDto>(aircraftRepository.Post(aircraft));
     }
 
