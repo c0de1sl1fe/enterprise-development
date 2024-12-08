@@ -1,38 +1,49 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace AirCompany.Domain.Entities;
 
 /// <summary>
 /// Представляет информацию о рейсе.
 /// </summary>
+[Table("flight")]
 public class Flight
 {
     /// <summary>
     /// Уникальный идентификатор рейса.
     /// </summary>
+    [Key]
+    [Column("id")]
     public required int Id { get; set; }
 
     /// <summary>
     /// Номер рейса.
     /// </summary>
+    [Column("number")]
     public string? Number { get; set; }
 
     /// <summary>
     /// Место отправления рейса.
     /// </summary>
+    [Column("departure_point")]
     public string? DeparturePoint { get; set; }
 
     /// <summary>
     /// Место назначения рейса.
     /// </summary>
+    [Column("arrival_point")]
     public string? ArrivalPoint { get; set; }
 
     /// <summary>
     /// Дата и время отправления рейса.
     /// </summary>
+    [Column("departure_date")]
     public DateTime? DepartureDate { get; set; }
 
     /// <summary>
     /// Дата и время прибытия рейса.
     /// </summary>
+    [Column("arrival_date")]
     public DateTime? ArrivalDate { get; set; }
 
     /// <summary>
@@ -50,6 +61,7 @@ public class Flight
     /// <summary>
     /// Тип самолета, используемого для рейса.
     /// </summary>
+    [ForeignKey("AircraftType")]
     public Aircraft? AircraftType { get; set; }
 
     /// <summary>
@@ -76,6 +88,6 @@ public class Flight
         DepartureDate = departureDate;
         ArrivalDate = arrivalDate;
         AircraftType = aircraftType;
-        Passengers = passengers;
+        Passengers = passengers ?? new List<RegisteredPassenger>();
     }
 }
