@@ -21,7 +21,7 @@ namespace AirCompany.API.Services
         /// </summary>
         /// <param name="flightId">Идентификатор рейса</param>
         /// <returns>Список пассажиров</returns>
-        List<RegisteredPassenger> GetPassengersWithNoBaggage(int flightId);
+        List<RegisteredPassengerFullDto> GetPassengersWithNoBaggage(int flightId);
 
         /// <summary>
         /// Выводит сводную информацию обо всех полетах самолетов данного типа в указанный период времени

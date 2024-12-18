@@ -1,0 +1,225 @@
+@page "/registered-passengers"
+@using MudBlazor
+@inject HttpClient Http
+@inject ISnackbar Snackbar
+
+<PageTitle>Registered Passengers</PageTitle>
+
+<h1>Registered Passenger Management</h1>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Number</th>
+        <th>Seat Number</th>
+        <th>Luggage Weight</th>
+        <th>Flight ID</th>
+        <th>Passenger ID</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (_registeredPassengers == null || !_registeredPassengers.Any())
+    {
+        <tr>
+            <td colspan="7" class="text-center">No registered passengers found.</td>
+        </tr>
+    }
+    else
+    {
+        @foreach (var registeredPassenger in _registeredPassengers)
+        {
+            <tr>
+                <td>@registeredPassenger.Id</td>
+                <td>@registeredPassenger.Number</td>
+                <td>@registeredPassenger.SeatNumber</td>
+                <td>@registeredPassenger.LuggageWeight</td>
+                <td>@registeredPassenger.Flight?.Id</td>
+                <td>@registeredPassenger.Passenger?.Id</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="@(() => ShowUpdForm(registeredPassenger.Id))">Edit</button>
+                    <button class="btn btn-danger" @onclick="@(() => DeleteRegisteredPassenger(registeredPassenger.Id))">Delete</button>
+                </td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>
+
+<h3>@(flagAdd ? "Add New Registered Passenger" : "Edit Registered Passenger")</h3>
+
+<EditForm Model="@currentRegisteredPassenger" OnValidSubmit=@HandleFormSubmit>
+    <DataAnnotationsValidator/>
+    <div class="mb-3">
+        <label for="number" class="form-label">Registered Passenger Number</label>
+        <InputText id="number" class="form-control" @bind-Value="currentRegisteredPassenger.Number"/>
+    </div>
+    <div class="mb-3">
+        <label for="seatNumber" class="form-label">Seat Number</label>
+        <InputText id="seatNumber" class="form-control" @bind-Value="currentRegisteredPassenger.SeatNumber"/>
+    </div>
+    <div class="mb-3">
+        <label for="luggageWeight" class="form-label">Luggage Weight</label>
+        <InputNumber id="luggageWeight" class="form-control" @bind-Value="currentRegisteredPassenger.LuggageWeight"/>
+    </div>
+    <div class="mb-3">
+        <label for="flightId" class="form-label">Flight ID</label>
+        <InputNumber id="flightId" class="form-control" @bind-Value="flightId"/> <!-- Изменено на просто число -->
+    </div>
+    <div class="mb-3">
+        <label for="passengerId" class="form-label">Passenger ID</label>
+        <InputNumber id="passengerId" class="form-control" @bind-Value="passengerId"/> <!-- Изменено на просто число -->
+    </div>
+    <button type="submit" class="btn btn-success">Save</button>
+    <button type="button" class="btn btn-secondary" @onclick="ClearForm">Cancel</button>
+</EditForm>
+
+@code {
+    private List<RegisteredPassengerFullDto> _registeredPassengers = new();
+    private RegisteredPassengerFullDto currentRegisteredPassenger = new() { Number = "", SeatNumber = "", LuggageWeight = null };
+    private string registeredPassengerUrl = "api/RegisteredPassenger";
+    private bool flagAdd = true;
+
+    // Новые переменные для хранения ID
+    private int flightId;
+    private int passengerId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadRegisteredPassengers();
+    }
+
+    private async Task LoadRegisteredPassengers()
+    {
+        try
+        {
+            _registeredPassengers = await Http.GetFromJsonAsync<List<RegisteredPassengerFullDto>>(registeredPassengerUrl) ?? new List<RegisteredPassengerFullDto>();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error loading registered passengers: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private async Task AddNewRegisteredPassenger()
+    {
+        try
+        {
+            var newRegisteredPassenger = new RegisteredPassengerFullDto
+            {
+                Number = currentRegisteredPassenger.Number,
+                SeatNumber = currentRegisteredPassenger.SeatNumber,
+                LuggageWeight = currentRegisteredPassenger.LuggageWeight,
+                Flight = new FlightFullDto { Id = flightId },
+                Passenger = new PassengerFullDto { Id = passengerId }
+            };
+
+            var response = await Http.PostAsJsonAsync(registeredPassengerUrl, newRegisteredPassenger);
+            if (response.IsSuccessStatusCode)
+            {
+                ClearForm();
+                await LoadRegisteredPassengers();
+            }
+            else
+            {
+                Snackbar.Add($"Failed to add registered passenger: {response.StatusCode}", Severity.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error adding registered passenger: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private async Task DeleteRegisteredPassenger(int registeredPassengerId)
+    {
+        try
+        {
+            var response = await Http.DeleteAsync($"{registeredPassengerUrl}/{registeredPassengerId}");
+            if (response.IsSuccessStatusCode)
+            {
+                await LoadRegisteredPassengers();
+            }
+            else
+            {
+                Snackbar.Add($"Failed to delete registered passenger: {response.StatusCode}", Severity.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error deleting registered passenger: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private async Task UpdateRegisteredPassenger()
+    {
+        try
+        {
+            var updatedRegisteredPassenger = new RegisteredPassengerFullDto
+            {
+                Id = currentRegisteredPassenger.Id,
+                Number = currentRegisteredPassenger.Number,
+                SeatNumber = currentRegisteredPassenger.SeatNumber,
+                LuggageWeight = currentRegisteredPassenger.LuggageWeight,
+                Flight = new FlightFullDto { Id = flightId },
+                Passenger = new PassengerFullDto { Id = passengerId }
+            };
+
+            var response = await Http.PutAsJsonAsync($"{registeredPassengerUrl}/{currentRegisteredPassenger.Id}", updatedRegisteredPassenger);
+            if (response.IsSuccessStatusCode)
+            {
+                ClearForm();
+                await LoadRegisteredPassengers();
+            }
+            else
+            {
+                Snackbar.Add($"Failed to update registered passenger: {response.StatusCode}", Severity.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error updating registered passenger: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private async Task ShowUpdForm(int registeredPassengerId)
+    {
+        flagAdd = false;
+        var response = await Http.GetFromJsonAsync<RegisteredPassengerFullDto>($"{registeredPassengerUrl}/{registeredPassengerId}");
+        if (response != null)
+        {
+            currentRegisteredPassenger = new RegisteredPassengerFullDto
+            {
+                Id = response.Id,
+                Number = response.Number,
+                SeatNumber = response.SeatNumber,
+                LuggageWeight = response.LuggageWeight,
+                Flight = new FlightFullDto { Id = flightId },
+                Passenger = new PassengerFullDto { Id = passengerId }
+            };
+            flightId = response.Flight?.Id ?? -1; 
+            passengerId = response.Passenger?.Id ?? -1;
+        }
+    }
+
+    private void ClearForm()
+    {
+        flagAdd = true;
+        currentRegisteredPassenger = new RegisteredPassengerFullDto() { Id = 0, Number = "", SeatNumber = "", LuggageWeight = null };
+        flightId = 0; 
+        passengerId = 0;
+    }
+
+    private async Task HandleFormSubmit()
+    {
+        if (flagAdd)
+        {
+            await AddNewRegisteredPassenger();
+        }
+        else
+        {
+            await UpdateRegisteredPassenger();
+        }
+    }
+
+}

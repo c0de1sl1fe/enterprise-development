@@ -72,10 +72,10 @@ public class RegisteredPassengerService(
         if (registeredPassenger == null) return null;
         var registeredPassengerFullDto =
             mapper.Map<RegisteredPassengerFullDto>(registeredPassengerRepository.Post(registeredPassenger));
-        if (entity.Passenger != null)
+        if (entity.Passenger != null && registeredPassengerFullDto != null)
             registeredPassengerFullDto.Passenger =
                 mapper.Map<PassengerFullDto>(passengerRepository.GetById(entity.Passenger.Id));
-        if (entity.Flight != null)
+        if (entity.Flight != null && registeredPassengerFullDto != null)
             registeredPassengerFullDto.Flight = mapper.Map<FlightFullDto>(flightRepository.GetById(entity.Flight.Id));
         return registeredPassengerFullDto;
     }

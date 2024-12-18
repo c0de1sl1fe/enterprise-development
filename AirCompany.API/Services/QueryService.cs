@@ -8,7 +8,10 @@ namespace AirCompany.API.Services;
 /// <summary>
 /// Сервис для запросов к данным о авиарейсах и пассажирах
 /// </summary>
-public class QueryService(IRepository<Flight> flightsRepository, IRepository<RegisteredPassenger> registeredPassengerRepository, IMapper mapper) : IQueryService
+public class QueryService(
+    IRepository<Flight> flightsRepository,
+    IRepository<RegisteredPassenger> registeredPassengerRepository,
+    IMapper mapper) : IQueryService
 {
     /// <summary>
     /// Выводит сведения о всех авиарейсах, вылетевших из указанного пункта отправления в указанный пункт прибытия
@@ -29,9 +32,9 @@ public class QueryService(IRepository<Flight> flightsRepository, IRepository<Reg
     /// </summary>
     /// <param name="flightId">Идентификатор рейса</param>
     /// <returns>Список пассажиров</returns>
-    public List<RegisteredPassenger> GetPassengersWithNoBaggage(int flightId)
+    public List<RegisteredPassengerFullDto> GetPassengersWithNoBaggage(int flightId)
     {
-        var passengers = registeredPassengerRepository.GetAll()
+        var passengers = registeredPassengerRepository.GetAll().Select(mapper.Map<RegisteredPassengerFullDto>)
             .Where(rp => rp.Flight != null && rp.Flight.Id == flightId && rp.LuggageWeight == 0)
             .OrderBy(rp => rp.Passenger?.FullName)
             .ToList();
@@ -101,7 +104,7 @@ public class QueryService(IRepository<Flight> flightsRepository, IRepository<Reg
         var flights = flightsRepository.GetAll()
             .Where(f => (f.ArrivalDate - f.DepartureDate) == minDuration)
             .ToList();
-        
+
         return mapper.Map<List<FlightFullDto>>(flights);
     }
 
@@ -116,7 +119,8 @@ public class QueryService(IRepository<Flight> flightsRepository, IRepository<Reg
             .Where(f => f.DeparturePoint == departure)
             .ToList();
 
-        var averageLoad = flights.Average(f => registeredPassengerRepository.GetAll().Count(rp => rp.Flight?.Id == f.Id));
+        var averageLoad =
+            flights.Average(f => registeredPassengerRepository.GetAll().Count(rp => rp.Flight?.Id == f.Id));
         var maxLoad = flights.Max(f => registeredPassengerRepository.GetAll().Count(rp => rp.Flight?.Id == f.Id));
 
         return new LoadInfoDto

@@ -27,7 +27,8 @@ public class RegisteredPassengerRepository(AirCompanyContext context, IRepositor
         
         if (flight == null || passenger == null)
             return null;
-
+        entity.Flight = flight;
+        entity.Passenger = passenger;
         context.RegisteredPassengers.Add(entity);
         context.SaveChanges();
         return entity;

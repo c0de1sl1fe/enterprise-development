@@ -1,0 +1,357 @@
+@page "/queries"
+@inject HttpClient Http
+@inject ISnackbar Snackbar
+
+<h2>Queries</h2>
+
+<MudExpansionPanels MultiExpansion="true">
+    <!-- Query 1 -->
+    <MudExpansionPanel Text="Query 1: Display all flights from a specified departure to arrival.">
+        <div class="input-container">
+            <div class="mb-3">
+                <MudTextField id="departure" Label="Departure" @bind-Value="_departure" />
+            </div>
+            <div class="mb-3">
+                <MudTextField id="arrival" Label="Arrival" @bind-Value="_arrival" />
+            </div>
+        </div>
+        <div class="button-container">
+            <MudButton Color="MudBlazor.Color.Primary" OnClick="@(() => ClickHandler(1))">Get result</MudButton>
+            <MudButton Color="MudBlazor.Color.Error" OnClick="@(() => ClearTask(1))">Clear</MudButton>
+        </div>
+        <div class="table-container">
+            @if (query1 != null && query1.Any())
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Flight ID</th>
+                            <th>Flight Number</th>
+                            <th>Departure Point</th>
+                            <th>Arrival Point</th>
+                            <th>Departure Date</th>
+                            <th>Arrival Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var flight in query1)
+                        {
+                            <tr>
+                                <td>@flight.Id</td>
+                                <td>@flight.Number</td>
+                                <td>@flight.DeparturePoint</td>
+                                <td>@flight.ArrivalPoint</td>
+                                <td>@flight.DepartureDate?.ToString("g")</td>
+                                <td>@flight.ArrivalDate?.ToString("g")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="no-data">No data available.</p>
+            }
+        </div>
+    </MudExpansionPanel>
+
+    <!-- Query 2 -->
+    <MudExpansionPanel Text="Query 2: Display the top flights by passenger count.">
+        <div class="button-container">
+            <MudButton Color="MudBlazor.Color.Primary" OnClick="@(() => ClickHandler(2))">Get result</MudButton>
+            <MudButton Color="MudBlazor.Color.Error" OnClick="@(() => ClearTask(2))">Clear</MudButton>
+        </div>
+        <div class="table-container">
+            @if (query2 != null)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Flight ID</th>
+                            <th>Departure Point</th>
+                            <th>Arrival Point</th>
+                            <th>Passengers Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var flight in query2)
+                        {
+                            <tr>
+                                <td>@flight.FlightId</td>
+                                <td>@flight.DeparturePoint</td>
+                                <td>@flight.ArrivalPoint</td>
+                                <td>@flight.PassengersCount</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="no-data">No data available.</p>
+            }
+        </div>
+    </MudExpansionPanel>
+
+    <!-- Query 3 -->
+    <MudExpansionPanel Text="Query 3: Display flight summary by aircraft type.">
+        <div class="input-container">
+            <div class="mb-3">
+                <MudTextField id="aircraftTypeId" Label="Aircraft Type ID" @bind-Value="_aircraftTypeId" />
+            </div>
+            <div class="mb-3">
+                <MudDatePicker id="startDate" Label="Start Date" @bind-Date="_startDate" Editable="true" />
+            </div>
+            <div class="mb-3">
+                <MudDatePicker id="endDate" Label="End Date" @bind-Date="_endDate" Editable="true" />
+            </div>
+        </div>
+        <div class="button-container">
+            <MudButton Color="MudBlazor.Color.Primary" OnClick="@(() => ClickHandler(3))">Get result</MudButton>
+            <MudButton Color="MudBlazor.Color.Error" OnClick="@(() => ClearTask(3))">Clear</MudButton>
+        </div>
+        <div class="table-container">
+            @if (query3 != null)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Flight ID</th>
+                            <th>Departure Point</th>
+                            <th>Arrival Point</th>
+                            <th>Departure Date</th>
+                            <th>Passengers Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var flight in query3)
+                        {
+                            <tr>
+                                <td>@flight.FlightId</td>
+                                <td>@flight.DeparturePoint</td>
+                                <td>@flight.ArrivalPoint</td>
+                                <td>@flight.DepartureDate?.ToString("g")</td>
+                                <td>@flight.PassengersCount</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="no-data">No data available.</p>
+            }
+        </div>
+    </MudExpansionPanel>
+
+    <!-- Query 4 -->
+    <MudExpansionPanel Text="Query 4: Display flights with minimum duration.">
+        <div class="button-container">
+            <MudButton Color="MudBlazor.Color.Primary" OnClick="@(() => ClickHandler(4))">Get result</MudButton>
+            <MudButton Color="MudBlazor.Color.Error" OnClick="@(() => ClearTask(4))">Clear</MudButton>
+        </div>
+        <div class="table-container">
+            @if (query4 != null)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Flight ID</th>
+                            <th>Flight Number</th>
+                            <th>Departure Point</th>
+                            <th>Arrival Point</th>
+                            <th>Departure Date</th>
+                            <th>Arrival Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var flight in query4)
+                        {
+                            <tr>
+                                <td>@flight.Id</td>
+                                <td>@flight.Number</td>
+                                <td>@flight.DeparturePoint</td>
+                                <td>@flight.ArrivalPoint</td>
+                                <td>@flight.DepartureDate?.ToString("g")</td>
+                                <td>@flight.ArrivalDate?.ToString("g")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="no-data">No data available.</p>
+            }
+        </div>
+    </MudExpansionPanel>
+
+    <!-- Query 5 -->
+    <MudExpansionPanel Text="Query 5: Display load info by departure.">
+        <div class="input-container">
+            <div class="mb-3">
+                <MudTextField id="departure" Label="Departure" @bind-Value="_departure" />
+            </div>
+        </div>
+        <div class="button-container">
+            <MudButton Color="MudBlazor.Color.Primary" OnClick="@(() => ClickHandler(5))">Get result</MudButton>
+            <MudButton Color="MudBlazor.Color.Error" OnClick="@(() => ClearTask(5))">Clear</MudButton>
+        </div>
+        <div class="table-container">
+            @if (loadInfo != null)
+            {
+                <p>Average Load: @loadInfo.AverageLoad</p>
+                <p>Max Load: @loadInfo.MaxLoad</p>
+            }
+            else
+            {
+                <p class="no-data">No data available.</p>
+            }
+        </div>
+    </MudExpansionPanel>
+
+    <!-- Query 6 -->
+    <MudExpansionPanel Text="Query 6: Display passengers with no baggage for a specific flight.">
+        <div class="input-container">
+            <div class="mb-3">
+                <MudTextField id="flightId" Label="Flight ID" @bind-Value="_flightId" />
+            </div>
+        </div>
+        <div class="button-container">
+            <MudButton Color="MudBlazor.Color.Primary" OnClick="@(() => ClickHandler(6))">Get result</MudButton>
+            <MudButton Color="MudBlazor.Color.Error" OnClick="@(() => ClearTask(6))">Clear</MudButton>
+        </div>
+        <div class="table-container">
+            @if (query6 != null)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Passenger ID</th>
+                            <th>Full Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var passenger in query6)
+                        {
+                            <tr>
+                                <td>@passenger.Id</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="no-data">No data available.</p>
+            }
+        </div>
+    </MudExpansionPanel>
+
+</MudExpansionPanels>
+
+@code{
+    private List<FlightFullDto> query1 = null!;
+    private List<TopFlightsDto> query2 = null!;
+    private List<FlightInfoDto> query3 = null!;
+    private List<FlightFullDto> query4 = null!;
+    private LoadInfoDto loadInfo = null!;
+    private List<RegisteredPassengerFullDto> query6 = null!;
+
+    private string _departure;
+    private string _arrival;
+    private int _aircraftTypeId;
+    private DateTime? _startDate;
+    private DateTime? _endDate;
+    private int _flightId;
+
+    private async Task ClickHandler(int taskId)
+    {
+        try
+        {
+            switch (taskId)
+            {
+                case 1:
+                    var response1 = await Http.GetFromJsonAsync<List<FlightFullDto>>($"api/query/flights?departure={Uri.EscapeDataString(_departure)}&arrival={Uri.EscapeDataString(_arrival)}");
+                    if (response1 != null)
+                    {
+                        query1 = response1;
+                    }
+                    break;
+                case 2:
+                    var response2 = await Http.GetFromJsonAsync<List<TopFlightsDto>>("api/query/top-flights");
+                    if (response2 != null)
+                    {
+                        query2 = response2;
+                    }
+                    break;
+                case 3:
+                    if (_aircraftTypeId > 0 && _startDate.HasValue && _endDate.HasValue)
+                    {
+                        var response3 = await Http.GetFromJsonAsync<List<FlightInfoDto>>($"api/query/flights-summary?aircraftTypeId={_aircraftTypeId}&startDate={_startDate.Value.ToString("o")}&endDate={_endDate.Value.ToString("o")}");
+                        if (response3 != null)
+                        {
+                            query3 = response3;
+                        }
+                    }
+                    break;
+                case 4:
+                    var response4 = await Http.GetFromJsonAsync<List<FlightFullDto>>("api/query/flights/min-duration");
+                    if (response4 != null)
+                    {
+                        query4 = response4;
+                    }
+                    break;
+                case 5:
+                    if (!string.IsNullOrEmpty(_departure))
+                    {
+                        var response5 = await Http.GetFromJsonAsync<LoadInfoDto>($"api/query/load-info?departure={Uri.EscapeDataString(_departure)}");
+                        if (response5 != null)
+                        {
+                            loadInfo = response5;
+                        }
+                    }
+                    break;
+                case 6:
+                    if (_flightId > 0)
+                    {
+                        var response6 = await Http.GetFromJsonAsync<List<RegisteredPassengerFullDto>>($"api/query/passengers/no-baggage?flightId={_flightId}");
+                        if (response6 != null)
+                        {
+                            query6 = response6;
+                        }
+                    }
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private void ClearTask(int taskId)
+    {
+        switch (taskId)
+        {
+            case 1:
+                query1 = null!;
+                break;
+            case 2:
+                query2 = null!;
+                break;
+            case 3:
+                query3 = null!;
+                break;
+            case 4:
+                query4 = null!;
+                break;
+            case 5:
+                loadInfo = null!;
+                break;
+            case 6:
+                query6 = null!;
+                break;
+        }
+    }
+}

@@ -1,0 +1,177 @@
+@page "/passengers"
+@using MudBlazor
+@inject HttpClient Http
+@inject ISnackbar Snackbar
+
+<PageTitle>Passengers</PageTitle>
+
+<h1>Passenger Management</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Passport Number</th>
+            <th>Full Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (_passengers == null || !_passengers.Any())
+        {
+            <tr>
+                <td colspan="4" class="text-center">No passengers found.</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var passenger in _passengers)
+            {
+                <tr>
+                    <td>@passenger.Id</td>
+                    <td>@passenger.PassportNumber</td>
+                    <td>@passenger.FullName</td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="@(() => ShowUpdForm(passenger.Id))">Edit</button>
+                        <button class="btn btn-danger" @onclick="@(() => DeletePassenger(passenger.Id))">Delete</button>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<h3>@(flagAdd ? "Add New Passenger" : "Edit Passenger")</h3>
+
+<EditForm Model="@currentPassenger" OnValidSubmit=@HandleFormSubmit>
+    <DataAnnotationsValidator />
+    <div class="mb-3">
+        <label for="passportNumber" class="form-label">Passport Number</label>
+        <InputText id="passportNumber" class="form-control" @bind-Value="currentPassenger.PassportNumber" />
+    </div>
+    <div class="mb-3">
+        <label for="fullName" class="form-label">Full Name</label>
+        <InputText id="fullName" class="form-control" @bind-Value="currentPassenger.FullName" />
+    </div>
+    <button type="submit" class="btn btn-success">Save</button>
+    <button type="button" class="btn btn-secondary" @onclick="ClearForm">Cancel</button>
+</EditForm>
+
+@code {
+    private List<PassengerFullDto> _passengers = new();
+    private PassengerFullDto currentPassenger = new() { PassportNumber = "", FullName = "" };
+    private string passengerUrl = "api/Passenger";
+    private bool flagAdd = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPassengers();
+    }
+
+    private async Task LoadPassengers()
+    {
+        try
+        {
+            _passengers = await Http.GetFromJsonAsync<List<PassengerFullDto>>(passengerUrl) ?? new List<PassengerFullDto>();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error loading passengers: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private async Task AddNewPassenger()
+    {
+        try
+        {
+            var response = await Http.PostAsJsonAsync(passengerUrl, currentPassenger);
+            if (response.IsSuccessStatusCode)
+            {
+                ClearForm();
+                await LoadPassengers();
+            }
+            else
+            {
+                Snackbar.Add($"Failed to add passenger: {response.StatusCode}", Severity.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error adding passenger: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private async Task DeletePassenger(int passengerId)
+    {
+        try
+        {
+            var response = await Http.DeleteAsync($"{passengerUrl}/{passengerId}");
+            if (response.IsSuccessStatusCode)
+            {
+                await LoadPassengers();
+            }
+            else
+            {
+                Snackbar.Add($"Failed to delete passenger: {response.StatusCode}", Severity.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error deleting passenger: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private async Task UpdatePassenger()
+    {
+        try
+        {
+            var response = await Http.PutAsJsonAsync($"{passengerUrl}/{currentPassenger.Id}", currentPassenger);
+            if (response.IsSuccessStatusCode)
+            {
+                ClearForm();
+                await LoadPassengers();
+            }
+            else
+            {
+                Snackbar.Add($"Failed to update passenger: {response.StatusCode}", Severity.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error updating passenger: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private async Task ShowUpdForm(int passengerId)
+    {
+        flagAdd = false;
+        var response = await Http.GetFromJsonAsync<PassengerFullDto>($"{passengerUrl}/{passengerId}");
+        if (response != null)
+        {
+            currentPassenger = new PassengerFullDto
+            {
+                Id = response.Id,
+                PassportNumber = response.PassportNumber,
+                FullName = response.FullName
+            };
+        }
+    }
+
+    private void ClearForm()
+    {
+        flagAdd = true;
+        currentPassenger = new PassengerFullDto() { Id = 0, PassportNumber = "", FullName = "" };
+    }
+
+    private async Task HandleFormSubmit()
+    {
+        if (flagAdd)
+        {
+            await AddNewPassenger();
+        }
+        else
+        {
+            await UpdatePassenger();
+        }
+    }
+}

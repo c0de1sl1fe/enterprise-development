@@ -1,0 +1,265 @@
+@page "/flights"
+@using MudBlazor
+@inject HttpClient Http
+@inject ISnackbar Snackbar
+
+<PageTitle>Flights</PageTitle>
+
+<h1>Flight Management</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Flight Number</th>
+            <th>Departure Point</th>
+            <th>Arrival Point</th>
+            <th>Departure Date</th>
+            <th>Arrival Date</th>
+            <th>Aircraft Type ID</th> <!-- Добавлено поле для Aircraft Type ID -->
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (_flights == null || !_flights.Any())
+        {
+            <tr>
+                <td colspan="8" class="text-center">No flights found.</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var flight in _flights)
+            {
+                <tr>
+                    <td>@flight.Id</td>
+                    <td>@flight.Number</td>
+                    <td>@flight.DeparturePoint</td>
+                    <td>@flight.ArrivalPoint</td>
+                    <td>@flight.DepartureDate?.ToString("g")</td>
+                    <td>@flight.ArrivalDate?.ToString("g")</td>
+                    <td>@flight.AircraftTypeId</td> <!-- Вывод Aircraft Type ID -->
+                    <td>
+                        <button class="btn btn-primary" @onclick="@(() => ShowUpdForm(flight.Id))">Edit</button>
+                        <button class="btn btn-danger" @onclick="@(() => DeleteFlight(flight.Id))">Delete</button>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<h3>@(flagAdd ? "Add New Flight" : "Edit Flight")</h3>
+
+<EditForm Model="@currentFlight" OnValidSubmit=@HandleFormSubmit>
+    <DataAnnotationsValidator />
+    <div class="mb-3">
+        <label for="number" class="form-label">Flight Number</label>
+        <InputText id="number" class="form-control" @bind-Value="currentFlight.Number" />
+    </div>
+    <div class="mb-3">
+        <label for="departurePoint" class="form-label">Departure Point</label>
+        <InputText id="departurePoint" class="form-control" @bind-Value="currentFlight.DeparturePoint" />
+    </div>
+    <div class="mb-3">
+        <label for="arrivalPoint" class="form-label">Arrival Point</label>
+        <InputText id="arrivalPoint" class="form-control" @bind-Value="currentFlight.ArrivalPoint" />
+    </div>
+    <div class="mb-3">
+        <label for="departureDate" class="form-label">Departure Date</label>
+        <InputDate id="departureDate" class="form-control" @bind-Value="currentFlight.DepartureDate" />
+    </div>
+    <div class="mb-3">
+        <label for="arrivalDate" class="form-label">Arrival Date</label>
+        <InputDate id="arrivalDate" class="form-control" @bind-Value="currentFlight.ArrivalDate" />
+    </div>
+    <div class="mb-3">
+        <label for="aircraftTypeId" class="form-label">Aircraft Type ID</label> <!-- Добавлено поле для Aircraft Type ID -->
+        <InputNumber id="aircraftTypeId" class="form-control" @bind-Value="currentFlight.AircraftTypeId" /> <!-- Поле для ввода Aircraft Type ID -->
+    </div>
+    <button type="submit" class="btn btn-success">Save</button>
+    <button type="button" class="btn btn-secondary" @onclick="ClearForm">Cancel</button>
+</EditForm>
+
+@code {
+    private List<FlightFullDto> _flights = new();
+    private FlightFullDto currentFlight = new() { Number = "", DeparturePoint = "", ArrivalPoint = "", DepartureDate = null, ArrivalDate = null, AircraftTypeId = 0 }; // Инициализация AircraftTypeId
+    private string flightUrl = "api/Flight";
+    private bool flagAdd = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadFlights();
+    }
+
+    private async Task LoadFlights()
+    {
+        try
+        {
+            _flights = await Http.GetFromJsonAsync<List<FlightFullDto>>(flightUrl) ?? new List<FlightFullDto>();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error loading flights: {ex.Message}", Severity.Error);
+        }
+    }
+
+    // private async Task AddNewFlight()
+    // {
+    //     try
+    //     {
+    //         var response = await Http.PostAsJsonAsync(flightUrl, currentFlight);
+    //         if (response.IsSuccessStatusCode)
+    //         {
+    //             ClearForm();
+    //             await LoadFlights();
+    //         }
+    //         else
+    //         {
+    //             Snackbar.Add($"Failed to add flight: {response.StatusCode}", Severity.Error);
+    //         }
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         Snackbar.Add($"Error adding flight: {ex.Message}", Severity.Error);
+    //     }
+    // }
+    private async Task AddNewFlight()
+    {
+        try
+        {
+            // Убедитесь, что даты имеют Kind = Utc
+            if (currentFlight.DepartureDate.HasValue)
+            {
+                currentFlight.DepartureDate = DateTime.SpecifyKind(currentFlight.DepartureDate.Value, DateTimeKind.Utc);
+            }
+            if (currentFlight.ArrivalDate.HasValue)
+            {
+                currentFlight.ArrivalDate = DateTime.SpecifyKind(currentFlight.ArrivalDate.Value, DateTimeKind.Utc);
+            }
+
+            var response = await Http.PostAsJsonAsync(flightUrl, currentFlight);
+            if (response.IsSuccessStatusCode)
+            {
+                ClearForm();
+                await LoadFlights();
+            }
+            else
+            {
+                Snackbar.Add($"Failed to add flight: {response.StatusCode}", Severity.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error adding flight: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private async Task DeleteFlight(int flightId)
+    {
+        try
+        {
+            var response = await Http.DeleteAsync($"{flightUrl}/{flightId}");
+            if (response.IsSuccessStatusCode)
+            {
+                await LoadFlights();
+            }
+            else
+            {
+                Snackbar.Add($"Failed to delete flight: {response.StatusCode}", Severity.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error deleting flight: {ex.Message}", Severity.Error);
+        }
+    }
+    private async Task UpdateFlight()
+    {
+        try
+        {
+            // Убедитесь, что даты имеют Kind = Utc
+            if (currentFlight.DepartureDate.HasValue)
+            {
+                currentFlight.DepartureDate = DateTime.SpecifyKind(currentFlight.DepartureDate.Value, DateTimeKind.Utc);
+            }
+            if (currentFlight.ArrivalDate.HasValue)
+            {
+                currentFlight.ArrivalDate = DateTime.SpecifyKind(currentFlight.ArrivalDate.Value, DateTimeKind.Utc);
+            }
+
+            var response = await Http.PutAsJsonAsync($"{flightUrl}/{currentFlight.Id}", currentFlight);
+            if (response.IsSuccessStatusCode)
+            {
+                ClearForm();
+                await LoadFlights();
+            }
+            else
+            {
+                Snackbar.Add($"Failed to update flight: {response.StatusCode}", Severity.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error updating flight: {ex.Message}", Severity.Error);
+        }
+    }
+
+    // private async Task UpdateFlight()
+    // {
+    //     try
+    //     {
+    //         var response = await Http.PutAsJsonAsync($"{flightUrl}/{currentFlight.Id}", currentFlight);
+    //         if (response.IsSuccessStatusCode)
+    //         {
+    //             ClearForm();
+    //             await LoadFlights();
+    //         }
+    //         else
+    //         {
+    //             Snackbar.Add($"Failed to update flight: {response.StatusCode}", Severity.Error);
+    //         }
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         Snackbar.Add($"Error updating flight: {ex.Message}", Severity.Error);
+    //     }
+    // }
+
+    private async Task ShowUpdForm(int flightId)
+    {
+        flagAdd = false;
+        var response = await Http.GetFromJsonAsync<FlightFullDto>($"{flightUrl}/{flightId}");
+        if (response != null)
+        {
+            currentFlight = new FlightFullDto
+            {
+                Id = response.Id,
+                Number = response.Number,
+                DeparturePoint = response.DeparturePoint,
+                ArrivalPoint = response.ArrivalPoint,
+                DepartureDate = response.DepartureDate,
+                ArrivalDate = response.ArrivalDate,
+                AircraftTypeId = response.AircraftTypeId 
+            };
+        }
+    }
+
+    private void ClearForm()
+    {
+        flagAdd = true;
+        currentFlight = new FlightFullDto() { Id = 0, Number = "", DeparturePoint = "", ArrivalPoint = "", DepartureDate = null, ArrivalDate = null, AircraftTypeId = 0 }; // Сброс формы
+    }
+
+    private async Task HandleFormSubmit()
+    {
+        if (flagAdd)
+        {
+            await AddNewFlight();
+        }
+        else
+        {
+            await UpdateFlight();
+        }
+    }
+}
