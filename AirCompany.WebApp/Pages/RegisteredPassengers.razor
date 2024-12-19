@@ -1,7 +1,7 @@
 @page "/registered-passengers"
 @using MudBlazor
-@inject HttpClient Http
 @inject ISnackbar Snackbar
+@inject ServerApi Api
 
 <PageTitle>Registered Passengers</PageTitle>
 
@@ -22,7 +22,7 @@
     @if (_registeredPassengers == null || !_registeredPassengers.Any())
     {
         <tr>
-            <td colspan="7" class="text-center">No registered passengers found.</td>
+            <td colspan="6" class="text-center">No registered passengers found.</td>
         </tr>
     }
     else
@@ -77,7 +77,6 @@
 @code {
     private List<RegisteredPassengerFullDto> _registeredPassengers = new();
     private RegisteredPassengerFullDto currentRegisteredPassenger = new() { Number = "", SeatNumber = "", LuggageWeight = null };
-    private string registeredPassengerUrl = "api/RegisteredPassenger";
     private bool flagAdd = true;
 
     // Новые переменные для хранения ID
@@ -93,7 +92,7 @@
     {
         try
         {
-            _registeredPassengers = await Http.GetFromJsonAsync<List<RegisteredPassengerFullDto>>(registeredPassengerUrl) ?? new List<RegisteredPassengerFullDto>();
+            _registeredPassengers = (await Api.RegisteredPassengerAllAsync()).ToList(); // Используем метод из ServerApi
         }
         catch (Exception ex)
         {
@@ -105,7 +104,7 @@
     {
         try
         {
-            var newRegisteredPassenger = new RegisteredPassengerFullDto
+            var newRegisteredPassenger = new RegisteredPassengerDto // Создаем новый DTO без ID
             {
                 Number = currentRegisteredPassenger.Number,
                 SeatNumber = currentRegisteredPassenger.SeatNumber,
@@ -114,15 +113,15 @@
                 Passenger = new PassengerFullDto { Id = passengerId }
             };
 
-            var response = await Http.PostAsJsonAsync(registeredPassengerUrl, newRegisteredPassenger);
-            if (response.IsSuccessStatusCode)
+            var response = await Api.RegisteredPassengerPOSTAsync(newRegisteredPassenger); // Используем метод из ServerApi
+            if (response != null)
             {
                 ClearForm();
                 await LoadRegisteredPassengers();
             }
             else
             {
-                Snackbar.Add($"Failed to add registered passenger: {response.StatusCode}", Severity.Error);
+                Snackbar.Add("Failed to add registered passenger.", Severity.Error);
             }
         }
         catch (Exception ex)
@@ -135,15 +134,8 @@
     {
         try
         {
-            var response = await Http.DeleteAsync($"{registeredPassengerUrl}/{registeredPassengerId}");
-            if (response.IsSuccessStatusCode)
-            {
-                await LoadRegisteredPassengers();
-            }
-            else
-            {
-                Snackbar.Add($"Failed to delete registered passenger: {response.StatusCode}", Severity.Error);
-            }
+            await Api.RegisteredPassengerDELETEAsync(registeredPassengerId); // Используем метод из ServerApi
+            await LoadRegisteredPassengers();
         }
         catch (Exception ex)
         {
@@ -155,26 +147,17 @@
     {
         try
         {
-            var updatedRegisteredPassenger = new RegisteredPassengerFullDto
+            await Api.RegisteredPassengerPUTAsync(currentRegisteredPassenger.Id, new RegisteredPassengerDto // Создаем новый DTO без ID
             {
-                Id = currentRegisteredPassenger.Id,
                 Number = currentRegisteredPassenger.Number,
                 SeatNumber = currentRegisteredPassenger.SeatNumber,
                 LuggageWeight = currentRegisteredPassenger.LuggageWeight,
                 Flight = new FlightFullDto { Id = flightId },
                 Passenger = new PassengerFullDto { Id = passengerId }
-            };
+            }); // Используем метод из ServerApi
 
-            var response = await Http.PutAsJsonAsync($"{registeredPassengerUrl}/{currentRegisteredPassenger.Id}", updatedRegisteredPassenger);
-            if (response.IsSuccessStatusCode)
-            {
-                ClearForm();
-                await LoadRegisteredPassengers();
-            }
-            else
-            {
-                Snackbar.Add($"Failed to update registered passenger: {response.StatusCode}", Severity.Error);
-            }
+            ClearForm();
+            await LoadRegisteredPassengers();
         }
         catch (Exception ex)
         {
@@ -185,7 +168,7 @@
     private async Task ShowUpdForm(int registeredPassengerId)
     {
         flagAdd = false;
-        var response = await Http.GetFromJsonAsync<RegisteredPassengerFullDto>($"{registeredPassengerUrl}/{registeredPassengerId}");
+        var response = await Api.RegisteredPassengerGETAsync(registeredPassengerId); // Используем метод из ServerApi
         if (response != null)
         {
             currentRegisteredPassenger = new RegisteredPassengerFullDto
@@ -193,11 +176,9 @@
                 Id = response.Id,
                 Number = response.Number,
                 SeatNumber = response.SeatNumber,
-                LuggageWeight = response.LuggageWeight,
-                Flight = new FlightFullDto { Id = flightId },
-                Passenger = new PassengerFullDto { Id = passengerId }
+                LuggageWeight = response.LuggageWeight
             };
-            flightId = response.Flight?.Id ?? -1; 
+            flightId = response.Flight?.Id ?? -1;
             passengerId = response.Passenger?.Id ?? -1;
         }
     }
@@ -206,7 +187,7 @@
     {
         flagAdd = true;
         currentRegisteredPassenger = new RegisteredPassengerFullDto() { Id = 0, Number = "", SeatNumber = "", LuggageWeight = null };
-        flightId = 0; 
+        flightId = 0;
         passengerId = 0;
     }
 

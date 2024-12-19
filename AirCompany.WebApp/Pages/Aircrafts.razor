@@ -1,0 +1,187 @@
+@page "/"
+@using MudBlazor
+@inject HttpClient Http
+@inject ServerApi Api
+
+<PageTitle>Aircrafts</PageTitle>
+
+<h1>Aircraft Management</h1>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Model</th>
+        <th>Capacity</th>
+        <th>Performance</th>
+        <th>Max Passengers</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (_aircrafts == null || !_aircrafts.Any())
+    {
+        <tr>
+            <td colspan="6" class="text-center">No aircrafts found.</td>
+        </tr>
+    }
+    else
+    {
+        @foreach (var aircraft in _aircrafts)
+        {
+            <tr>
+                <td>@aircraft.Id</td>
+                <td>@aircraft.Model</td>
+                <td>@aircraft.Capacity</td>
+                <td>@aircraft.Performance</td>
+                <td>@aircraft.MaxPassengers</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="@(() => ShowUpdForm(aircraft.Id))">Edit</button>
+                    <button class="btn btn-danger" @onclick="@(() => DeleteAircraft(aircraft.Id))">Delete</button>
+                </td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>
+
+<h3>@(flagAdd ? "Add New Aircraft" : "Edit Aircraft")</h3>
+
+<EditForm Model="@currentAircraft" OnValidSubmit=@HandleFormSubmit>
+    <DataAnnotationsValidator/>
+    <div class="mb-3">
+        <label for="model" class="form-label">Model</label>
+        <InputText id="model" class="form-control" @bind-Value="currentAircraft.Model"/>
+    </div>
+    <div class="mb-3">
+        <label for="capacity" class="form-label">Capacity</label>
+        <InputNumber id="capacity" class="form-control" @bind-Value="currentAircraft.Capacity"/>
+    </div>
+    <div class="mb-3">
+        <label for="performance" class="form-label">Performance</label>
+        <InputNumber id="performance" class="form-control" @bind-Value="currentAircraft.Performance"/>
+    </div>
+    <div class="mb-3">
+        <label for="maxPassengers" class="form-label">Max Passengers</label>
+        <InputNumber id="maxPassengers" class="form-control" @bind-Value="currentAircraft.MaxPassengers"/>
+    </div>
+    <button type="submit" class="btn btn-success">Save</button>
+    <button type="button" class="btn btn-secondary" @onclick="ClearForm">Cancel</button>
+</EditForm>
+
+@code {
+    private List<AircraftFullDto> _aircrafts = new();
+    private AircraftFullDto currentAircraft = new() { Model = "", Capacity = null, Performance = null, MaxPassengers = null };
+    private string aircraftUrl = "api/Aircraft";
+    private bool flagAdd = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAircrafts();
+    }
+
+    private async Task LoadAircrafts()
+    {
+        try
+        {
+            _aircrafts = (await Api.AircraftAllAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+
+    private async Task AddNewAircraft()
+    {
+        try
+        {
+            var tmp = new AircraftDto
+            {
+                Capacity = currentAircraft.Capacity,
+                MaxPassengers = currentAircraft.MaxPassengers,
+                Model = currentAircraft.Model,
+                Performance = currentAircraft.Performance
+            };
+            var response = await Api.AircraftPOSTAsync(tmp);
+
+            if (response != null)
+            {
+                ClearForm();
+                await LoadAircrafts();
+            }
+            else
+            {
+            }
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+
+    private async Task DeleteAircraft(int aircraftId)
+    {
+        try
+        {
+            await Api.AircraftDELETEAsync(aircraftId);
+            await LoadAircrafts();
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+
+    private async Task UpdateAircraft()
+    {
+        try
+        {
+            await Api.AircraftPUTAsync(currentAircraft.Id, new AircraftDto
+            {
+                Capacity = currentAircraft.Capacity,
+                MaxPassengers = currentAircraft.MaxPassengers,
+                Model = currentAircraft.Model,
+                Performance = currentAircraft.Performance
+            });
+            ClearForm();
+            await LoadAircrafts();
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+
+    private async Task ShowUpdForm(int aircraftId)
+    {
+        flagAdd = false;
+        var response = await Api.AircraftGETAsync(aircraftId);
+        if (response != null)
+        {
+            currentAircraft = new AircraftFullDto
+            {
+                Id = response.Id,
+                Model = response.Model,
+                Capacity = response.Capacity,
+                Performance = response.Performance,
+                MaxPassengers = response.MaxPassengers
+            };
+        }
+    }
+
+    private void ClearForm()
+    {
+        flagAdd = true;
+        currentAircraft = new AircraftFullDto() { Id = 0, Model = "", Capacity = null, Performance = null, MaxPassengers = null };
+    }
+
+    private async Task HandleFormSubmit()
+    {
+        if (flagAdd)
+        {
+            await AddNewAircraft();
+        }
+        else
+        {
+            await UpdateAircraft();
+        }
+    }
+
+}
