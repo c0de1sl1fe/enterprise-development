@@ -11,38 +11,33 @@
   </ItemGroup>
 
   <ItemGroup>
-    <OpenApiReference Include="Api\swagger.json" CodeGenerator="NSwagCSharp">
-      <ClassName>ServerApp</ClassName>
+    <OpenApiReference Include="Api\swagger.json">
+      <CodeGenerator>NSwagCSharp</CodeGenerator>
+      <ClassName>ServerApi</ClassName>
     </OpenApiReference>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.8" PrivateAssets="all" />
-
-    <PackageReference Include="Blazorise" Version="1.7.0" />
-    <PackageReference Include="Blazorise.Bootstrap" Version="1.7.0" />
-    <PackageReference Include="Blazorise.Bootstrap5" Version="1.7.0" />
-    <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.7.0" />
-    <PackageReference Include="Blazorise.Icons.Material" Version="1.7.0" />
-    <PackageReference Include="Blazorise.Material" Version="1.7.0" />
     <PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="7.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="NSwag.ApiDescription.Client" Version="13.18.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="MudBlazor" Version="7.14.0" />
     <PackageReference Include="MudBlazor.FontIcons.MaterialSymbols" Version="1.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="NSwag.ApiDescription.Client" Version="13.18.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-      
-
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="wwwroot\css\app.css" />
+    <PackageReference Include="Blazorise" Version="1.7.0" />
+    <PackageReference Include="Blazorise.Bootstrap" Version="1.7.0" />
+    <PackageReference Include="Blazorise.Bootstrap5" Version="1.7.0" />
+    <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.7.0" />
+    <PackageReference Include="Blazorise.Icons.Material" Version="1.7.0" />
+    <PackageReference Include="Blazorise.Material" Version="1.7.0" />      
   </ItemGroup>
 
 </Project>
