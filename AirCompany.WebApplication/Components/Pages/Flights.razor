@@ -9,73 +9,73 @@
 
 <table class="table table-striped">
     <thead>
-        <tr>
-            <th>ID</th>
-            <th>Flight Number</th>
-            <th>Departure Point</th>
-            <th>Arrival Point</th>
-            <th>Departure Date</th>
-            <th>Arrival Date</th>
-            <th>Aircraft Type ID</th> <!-- Добавлено поле для Aircraft Type ID -->
-            <th>Actions</th>
-        </tr>
+    <tr>
+        <th>ID</th>
+        <th>Flight Number</th>
+        <th>Departure Point</th>
+        <th>Arrival Point</th>
+        <th>Departure Date</th>
+        <th>Arrival Date</th>
+        <th>Aircraft Type ID</th>
+        <th>Actions</th>
+    </tr>
     </thead>
     <tbody>
-        @if (_flights == null || !_flights.Any())
+    @if (_flights == null || !_flights.Any())
+    {
+        <tr>
+            <td colspan="8" class="text-center">No flights found.</td>
+        </tr>
+    }
+    else
+    {
+        @foreach (var flight in _flights)
         {
             <tr>
-                <td colspan="8" class="text-center">No flights found.</td>
+                <td>@flight.Id</td>
+                <td>@flight.Number</td>
+                <td>@flight.DeparturePoint</td>
+                <td>@flight.ArrivalPoint</td>
+                <td>@flight.DepartureDate?.ToString("g")</td>
+                <td>@flight.ArrivalDate?.ToString("g")</td>
+                <td>@flight.AircraftTypeId</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="@(() => ShowUpdForm(flight.Id))">Edit</button>
+                    <button class="btn btn-danger" @onclick="@(() => DeleteFlight(flight.Id))">Delete</button>
+                </td>
             </tr>
         }
-        else
-        {
-            @foreach (var flight in _flights)
-            {
-                <tr>
-                    <td>@flight.Id</td>
-                    <td>@flight.Number</td>
-                    <td>@flight.DeparturePoint</td>
-                    <td>@flight.ArrivalPoint</td>
-                    <td>@flight.DepartureDate?.ToString("g")</td>
-                    <td>@flight.ArrivalDate?.ToString("g")</td>
-                    <td>@flight.AircraftTypeId</td> <!-- Вывод Aircraft Type ID -->
-                    <td>
-                        <button class="btn btn-primary" @onclick="@(() => ShowUpdForm(flight.Id))">Edit</button>
-                        <button class="btn btn-danger" @onclick="@(() => DeleteFlight(flight.Id))">Delete</button>
-                    </td>
-                </tr>
-            }
-        }
+    }
     </tbody>
 </table>
 
 <h3>@(flagAdd ? "Add New Flight" : "Edit Flight")</h3>
 
 <EditForm Model="@currentFlight" OnValidSubmit=@HandleFormSubmit>
-    <DataAnnotationsValidator />
+    <DataAnnotationsValidator/>
     <div class="mb-3">
         <label for="number" class="form-label">Flight Number</label>
-        <InputText id="number" class="form-control" @bind-Value="currentFlight.Number" />
+        <InputText id="number" class="form-control" @bind-Value="currentFlight.Number"/>
     </div>
     <div class="mb-3">
         <label for="departurePoint" class="form-label">Departure Point</label>
-        <InputText id="departurePoint" class="form-control" @bind-Value="currentFlight.DeparturePoint" />
+        <InputText id="departurePoint" class="form-control" @bind-Value="currentFlight.DeparturePoint"/>
     </div>
     <div class="mb-3">
         <label for="arrivalPoint" class="form-label">Arrival Point</label>
-        <InputText id="arrivalPoint" class="form-control" @bind-Value="currentFlight.ArrivalPoint" />
+        <InputText id="arrivalPoint" class="form-control" @bind-Value="currentFlight.ArrivalPoint"/>
     </div>
     <div class="mb-3">
         <label for="departureDate" class="form-label">Departure Date</label>
-        <InputDate id="departureDate" class="form-control" @bind-Value="currentFlight.DepartureDate" />
+        <InputDate id="departureDate" class="form-control" @bind-Value="currentFlight.DepartureDate"/>
     </div>
     <div class="mb-3">
         <label for="arrivalDate" class="form-label">Arrival Date</label>
-        <InputDate id="arrivalDate" class="form-control" @bind-Value="currentFlight.ArrivalDate" />
+        <InputDate id="arrivalDate" class="form-control" @bind-Value="currentFlight.ArrivalDate"/>
     </div>
     <div class="mb-3">
-        <label for="aircraftTypeId" class="form-label">Aircraft Type ID</label> <!-- Добавлено поле для Aircraft Type ID -->
-        <InputNumber id="aircraftTypeId" class="form-control" @bind-Value="currentFlight.AircraftTypeId" /> <!-- Поле для ввода Aircraft Type ID -->
+        <label for="aircraftTypeId" class="form-label">Aircraft Type ID</label>
+        <InputNumber id="aircraftTypeId" class="form-control" @bind-Value="currentFlight.AircraftTypeId"/>
     </div>
     <button type="submit" class="btn btn-success">Save</button>
     <button type="button" class="btn btn-secondary" @onclick="ClearForm">Cancel</button>
@@ -83,7 +83,7 @@
 
 @code {
     private List<FlightFullDto> _flights = new();
-    private FlightFullDto currentFlight = new() { Number = "", DeparturePoint = "", ArrivalPoint = "", DepartureDate = null, ArrivalDate = null, AircraftTypeId = 0 }; // Инициализация AircraftTypeId
+    private FlightFullDto currentFlight = new() { Number = "", DeparturePoint = "", ArrivalPoint = "", DepartureDate = null, ArrivalDate = null, AircraftTypeId = 0 };
     private string flightUrl = "api/Flight";
     private bool flagAdd = true;
 
@@ -108,14 +108,15 @@
     {
         try
         {
-            // Убедитесь, что даты имеют Kind = Utc
+// Преобразование DateTimeOffset в DateTime
             if (currentFlight.DepartureDate.HasValue)
             {
-                currentFlight.DepartureDate = DateTime.SpecifyKind(currentFlight.DepartureDate.Value, DateTimeKind.Utc);
+                currentFlight.DepartureDate = DateTime.SpecifyKind(currentFlight.DepartureDate.Value.DateTime, DateTimeKind.Utc);
             }
+
             if (currentFlight.ArrivalDate.HasValue)
             {
-                currentFlight.ArrivalDate = DateTime.SpecifyKind(currentFlight.ArrivalDate.Value, DateTimeKind.Utc);
+                currentFlight.ArrivalDate = DateTime.SpecifyKind(currentFlight.ArrivalDate.Value.DateTime, DateTimeKind.Utc);
             }
 
             var response = await Http.PostAsJsonAsync(flightUrl, currentFlight);
@@ -154,18 +155,19 @@
             Snackbar.Add($"Error deleting flight: {ex.Message}", Severity.Error);
         }
     }
+
     private async Task UpdateFlight()
     {
         try
         {
-            // Убедитесь, что даты имеют Kind = Utc
             if (currentFlight.DepartureDate.HasValue)
             {
-                currentFlight.DepartureDate = DateTime.SpecifyKind(currentFlight.DepartureDate.Value, DateTimeKind.Utc);
+                currentFlight.DepartureDate = DateTime.SpecifyKind(currentFlight.DepartureDate.Value.DateTime, DateTimeKind.Utc);
             }
+
             if (currentFlight.ArrivalDate.HasValue)
             {
-                currentFlight.ArrivalDate = DateTime.SpecifyKind(currentFlight.ArrivalDate.Value, DateTimeKind.Utc);
+                currentFlight.ArrivalDate = DateTime.SpecifyKind(currentFlight.ArrivalDate.Value.DateTime, DateTimeKind.Utc);
             }
 
             var response = await Http.PutAsJsonAsync($"{flightUrl}/{currentFlight.Id}", currentFlight);
@@ -199,7 +201,7 @@
                 ArrivalPoint = response.ArrivalPoint,
                 DepartureDate = response.DepartureDate,
                 ArrivalDate = response.ArrivalDate,
-                AircraftTypeId = response.AircraftTypeId 
+                AircraftTypeId = response.AircraftTypeId
             };
         }
     }
@@ -207,7 +209,7 @@
     private void ClearForm()
     {
         flagAdd = true;
-        currentFlight = new FlightFullDto() { Id = 0, Number = "", DeparturePoint = "", ArrivalPoint = "", DepartureDate = null, ArrivalDate = null, AircraftTypeId = 0 }; // Сброс формы
+        currentFlight = new FlightFullDto() { Id = 0, Number = "", DeparturePoint = "", ArrivalPoint = "", DepartureDate = null, ArrivalDate = null, AircraftTypeId = 0 };
     }
 
     private async Task HandleFormSubmit()
@@ -221,4 +223,5 @@
             await UpdateFlight();
         }
     }
+
 }
