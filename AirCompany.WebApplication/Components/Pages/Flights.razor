@@ -104,26 +104,6 @@
         }
     }
 
-    // private async Task AddNewFlight()
-    // {
-    //     try
-    //     {
-    //         var response = await Http.PostAsJsonAsync(flightUrl, currentFlight);
-    //         if (response.IsSuccessStatusCode)
-    //         {
-    //             ClearForm();
-    //             await LoadFlights();
-    //         }
-    //         else
-    //         {
-    //             Snackbar.Add($"Failed to add flight: {response.StatusCode}", Severity.Error);
-    //         }
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         Snackbar.Add($"Error adding flight: {ex.Message}", Severity.Error);
-    //     }
-    // }
     private async Task AddNewFlight()
     {
         try
@@ -204,27 +184,6 @@
             Snackbar.Add($"Error updating flight: {ex.Message}", Severity.Error);
         }
     }
-
-    // private async Task UpdateFlight()
-    // {
-    //     try
-    //     {
-    //         var response = await Http.PutAsJsonAsync($"{flightUrl}/{currentFlight.Id}", currentFlight);
-    //         if (response.IsSuccessStatusCode)
-    //         {
-    //             ClearForm();
-    //             await LoadFlights();
-    //         }
-    //         else
-    //         {
-    //             Snackbar.Add($"Failed to update flight: {response.StatusCode}", Severity.Error);
-    //         }
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         Snackbar.Add($"Error updating flight: {ex.Message}", Severity.Error);
-    //     }
-    // }
 
     private async Task ShowUpdForm(int flightId)
     {

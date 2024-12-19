@@ -1,0 +1,1421 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "AirCompany.API",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/Aircraft": {
+      "get": {
+        "tags": [
+          "Aircraft"
+        ],
+        "summary": "Возвращает список всех самолетов",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AircraftFullDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AircraftFullDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AircraftFullDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Aircraft"
+        ],
+        "summary": "Добавляет новый самолет",
+        "requestBody": {
+          "description": "Информация о новом самолете",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AircraftDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AircraftDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AircraftDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AircraftFullDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AircraftFullDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AircraftFullDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Aircraft/{id}": {
+      "get": {
+        "tags": [
+          "Aircraft"
+        ],
+        "summary": "Возвращает самолет по идентификатору",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор самолета",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AircraftFullDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AircraftFullDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AircraftFullDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Aircraft"
+        ],
+        "summary": "Изменяет самолет по идентификатору",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор самолета",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Обновлённая информация о самолете",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AircraftDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AircraftDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AircraftDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Aircraft"
+        ],
+        "summary": "Удаляет самолет по идентификатору",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор самолета",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Flight": {
+      "get": {
+        "tags": [
+          "Flight"
+        ],
+        "summary": "Возвращает список всех рейсов",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FlightFullDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FlightFullDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FlightFullDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Flight"
+        ],
+        "summary": "Добавляет новый рейс",
+        "requestBody": {
+          "description": "Информация о новом рейсе",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FlightDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FlightDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/FlightDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlightFullDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlightFullDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlightFullDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Flight/{id}": {
+      "get": {
+        "tags": [
+          "Flight"
+        ],
+        "summary": "Возвращает рейс по идентификатору",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор рейса",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlightFullDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlightFullDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlightFullDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Flight"
+        ],
+        "summary": "Изменяет рейс по идентификатору",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор рейса",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Обновлённая информация о рейсе",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FlightDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FlightDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/FlightDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Flight"
+        ],
+        "summary": "Удаляет рейс по идентификатору",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор рейса",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Passenger": {
+      "get": {
+        "tags": [
+          "Passenger"
+        ],
+        "summary": "Возвращает список всех пассажиров",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PassengerFullDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PassengerFullDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PassengerFullDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Passenger"
+        ],
+        "summary": "Добавляет нового пассажира",
+        "requestBody": {
+          "description": "Информация о новом пассажире",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PassengerDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PassengerDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PassengerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PassengerFullDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PassengerFullDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PassengerFullDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Passenger/{id}": {
+      "get": {
+        "tags": [
+          "Passenger"
+        ],
+        "summary": "Возвращает пассажира по идентификатору",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор пассажира",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PassengerFullDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PassengerFullDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PassengerFullDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Passenger"
+        ],
+        "summary": "Изменяет пассажира по идентификатору",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор пассажира",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Обновлённая информация о пассажире",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PassengerDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PassengerDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PassengerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Passenger"
+        ],
+        "summary": "Удаляет пассажира по идентификатору",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор пассажира",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Query/flights": {
+      "get": {
+        "tags": [
+          "Query"
+        ],
+        "summary": "Возвращает список всех авиарейсов, вылетевших из указанного пункта отправления в указанный пункт прибытия",
+        "parameters": [
+          {
+            "name": "departure",
+            "in": "query",
+            "description": "Пункт отправления",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "arrival",
+            "in": "query",
+            "description": "Пункт прибытия",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FlightFullDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FlightFullDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FlightFullDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Query/passengers/no-baggage": {
+      "get": {
+        "tags": [
+          "Query"
+        ],
+        "summary": "Возвращает список пассажиров, летящих данным рейсом, вес багажа которых равен нулю",
+        "parameters": [
+          {
+            "name": "flightId",
+            "in": "query",
+            "description": "Идентификатор рейса",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RegisteredPassengerFullDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RegisteredPassengerFullDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RegisteredPassengerFullDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Query/flights-summary": {
+      "get": {
+        "tags": [
+          "Query"
+        ],
+        "summary": "Возвращает сводную информацию обо всех полетах самолетов данного типа в указанный период времени",
+        "parameters": [
+          {
+            "name": "aircraftTypeId",
+            "in": "query",
+            "description": "Тип самолета",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "Начальная дата",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "Конечная дата",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FlightInfoDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FlightInfoDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FlightInfoDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Query/top-flights": {
+      "get": {
+        "tags": [
+          "Query"
+        ],
+        "summary": "Возвращает топ 5 авиарейсов по количеству перевезённых пассажиров",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TopFlightsDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TopFlightsDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TopFlightsDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Query/flights/min-duration": {
+      "get": {
+        "tags": [
+          "Query"
+        ],
+        "summary": "Возвращает список рейсов с минимальным временем в пути",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FlightFullDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FlightFullDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FlightFullDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Query/load-info": {
+      "get": {
+        "tags": [
+          "Query"
+        ],
+        "summary": "Возвращает информацию о средней и максимальной загрузке авиарейсов из заданного пункта отправления",
+        "parameters": [
+          {
+            "name": "departure",
+            "in": "query",
+            "description": "Пункт отправления",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoadInfoDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoadInfoDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoadInfoDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/RegisteredPassenger": {
+      "get": {
+        "tags": [
+          "RegisteredPassenger"
+        ],
+        "summary": "Возвращает список всех зарегистрированных пассажиров",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RegisteredPassengerFullDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RegisteredPassengerFullDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RegisteredPassengerFullDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "RegisteredPassenger"
+        ],
+        "summary": "Добавляет нового зарегистрированного пассажира",
+        "requestBody": {
+          "description": "Информация о новом зарегистрированном пассажире",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisteredPassengerDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisteredPassengerDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisteredPassengerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisteredPassengerFullDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisteredPassengerFullDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisteredPassengerFullDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/RegisteredPassenger/{id}": {
+      "get": {
+        "tags": [
+          "RegisteredPassenger"
+        ],
+        "summary": "Возвращает зарегистрированного пассажира по идентификатору",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор зарегистрированного пассажира",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisteredPassengerFullDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisteredPassengerFullDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisteredPassengerFullDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "RegisteredPassenger"
+        ],
+        "summary": "Изменяет зарегистрированного пассажира по идентификатору",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор зарегистрированного пассажира",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Обновлённая информация о зарегистрированном пассажире",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisteredPassengerDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisteredPassengerDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisteredPassengerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "RegisteredPassenger"
+        ],
+        "summary": "Удаляет зарегистрированного пассажира по идентификатору",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор зарегистрированного пассажира",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AircraftDto": {
+        "type": "object",
+        "properties": {
+          "model": {
+            "type": "string",
+            "description": "Модель самолета.",
+            "nullable": true
+          },
+          "capacity": {
+            "type": "number",
+            "description": "Вместимость самолета.",
+            "format": "double",
+            "nullable": true
+          },
+          "performance": {
+            "type": "number",
+            "description": "Производительность самолета.",
+            "format": "double",
+            "nullable": true
+          },
+          "maxPassengers": {
+            "type": "integer",
+            "description": "Максимальное количество пассажиров.",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Представляет информацию о самолете для передачи данных."
+      },
+      "AircraftFullDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Идентификатор самолета.",
+            "format": "int32"
+          },
+          "model": {
+            "type": "string",
+            "description": "Модель самолета.",
+            "nullable": true
+          },
+          "capacity": {
+            "type": "number",
+            "description": "Вместимость самолета.",
+            "format": "double",
+            "nullable": true
+          },
+          "performance": {
+            "type": "number",
+            "description": "Производительность самолета.",
+            "format": "double",
+            "nullable": true
+          },
+          "maxPassengers": {
+            "type": "integer",
+            "description": "Максимальное количество пассажиров.",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Представляет полную информацию о самолете для передачи данных."
+      },
+      "FlightDto": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "string",
+            "description": "Номер рейса.",
+            "nullable": true
+          },
+          "departurePoint": {
+            "type": "string",
+            "description": "Место отправления рейса.",
+            "nullable": true
+          },
+          "arrivalPoint": {
+            "type": "string",
+            "description": "Место назначения рейса.",
+            "nullable": true
+          },
+          "departureDate": {
+            "type": "string",
+            "description": "Дата и время отправления рейса.",
+            "format": "date-time",
+            "nullable": true
+          },
+          "arrivalDate": {
+            "type": "string",
+            "description": "Дата и время прибытия рейса.",
+            "format": "date-time",
+            "nullable": true
+          },
+          "aircraftTypeId": {
+            "type": "integer",
+            "description": "Идентификатор типа самолета, используемого для рейса.",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Представляет информацию о рейсе для передачи данных."
+      },
+      "FlightFullDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Идентификатор рейса.",
+            "format": "int32"
+          },
+          "number": {
+            "type": "string",
+            "description": "Номер рейса.",
+            "nullable": true
+          },
+          "departurePoint": {
+            "type": "string",
+            "description": "Место отправления рейса.",
+            "nullable": true
+          },
+          "arrivalPoint": {
+            "type": "string",
+            "description": "Место назначения рейса.",
+            "nullable": true
+          },
+          "departureDate": {
+            "type": "string",
+            "description": "Дата и время отправления рейса.",
+            "format": "date-time",
+            "nullable": true
+          },
+          "arrivalDate": {
+            "type": "string",
+            "description": "Дата и время прибытия рейса.",
+            "format": "date-time",
+            "nullable": true
+          },
+          "aircraftTypeId": {
+            "type": "integer",
+            "description": "Идентификатор типа самолета, используемого для рейса.",
+            "format": "int32"
+          },
+          "passengers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RegisteredPassengerFullDto"
+            },
+            "description": "Список идентификаторов зарегистрированных на рейс пассажиров.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Представляет полную информацию о рейсе для передачи данных."
+      },
+      "FlightInfoDto": {
+        "type": "object",
+        "properties": {
+          "flightId": {
+            "type": "integer",
+            "description": "Идентификатор рейса",
+            "format": "int32"
+          },
+          "departurePoint": {
+            "type": "string",
+            "description": "Пункт отправления",
+            "nullable": true
+          },
+          "arrivalPoint": {
+            "type": "string",
+            "description": "Пункт прибытия",
+            "nullable": true
+          },
+          "departureDate": {
+            "type": "string",
+            "description": "Дата и время отправления",
+            "format": "date-time",
+            "nullable": true
+          },
+          "passengersCount": {
+            "type": "integer",
+            "description": "Количество пассажиров",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false,
+        "description": "DTO для информации о рейсе"
+      },
+      "LoadInfoDto": {
+        "type": "object",
+        "properties": {
+          "averageLoad": {
+            "type": "number",
+            "description": "Средняя загрузка",
+            "format": "double"
+          },
+          "maxLoad": {
+            "type": "integer",
+            "description": "Максимальная загрузка",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false,
+        "description": "DTO для информации о загрузке рейсов"
+      },
+      "PassengerDto": {
+        "type": "object",
+        "properties": {
+          "passportNumber": {
+            "type": "string",
+            "description": "Номер паспорта пассажира.",
+            "nullable": true
+          },
+          "fullName": {
+            "type": "string",
+            "description": "Полное имя пассажира.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Представляет информацию о пассажире для передачи данных."
+      },
+      "PassengerFullDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Идентификатор пассажира.",
+            "format": "int32"
+          },
+          "passportNumber": {
+            "type": "string",
+            "description": "Номер паспорта пассажира.",
+            "nullable": true
+          },
+          "fullName": {
+            "type": "string",
+            "description": "Полное имя пассажира.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Представляет полную информацию о пассажире для передачи данных."
+      },
+      "RegisteredPassengerDto": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "string",
+            "description": "Номер зарегистрированного пассажира.",
+            "nullable": true
+          },
+          "seatNumber": {
+            "type": "string",
+            "description": "Номер места, назначенного пассажиру.",
+            "nullable": true
+          },
+          "luggageWeight": {
+            "type": "number",
+            "description": "Вес багажа пассажира.",
+            "format": "double",
+            "nullable": true
+          },
+          "flight": {
+            "$ref": "#/components/schemas/FlightFullDto"
+          },
+          "passenger": {
+            "$ref": "#/components/schemas/PassengerFullDto"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Представляет зарегистрированного пассажира на рейсе для передачи данных."
+      },
+      "RegisteredPassengerFullDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Идентификатор зарегистрированного пассажира.",
+            "format": "int32"
+          },
+          "number": {
+            "type": "string",
+            "description": "Номер зарегистрированного пассажира.",
+            "nullable": true
+          },
+          "seatNumber": {
+            "type": "string",
+            "description": "Номер места, назначенного пассажиру.",
+            "nullable": true
+          },
+          "luggageWeight": {
+            "type": "number",
+            "description": "Вес багажа пассажира.",
+            "format": "double",
+            "nullable": true
+          },
+          "flight": {
+            "$ref": "#/components/schemas/FlightFullDto"
+          },
+          "passenger": {
+            "$ref": "#/components/schemas/PassengerFullDto"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Представляет полную информацию о зарегистрированном пассажире на рейсе для передачи данных."
+      },
+      "TopFlightsDto": {
+        "type": "object",
+        "properties": {
+          "flightId": {
+            "type": "integer",
+            "description": "Идентификатор рейса",
+            "format": "int32"
+          },
+          "departurePoint": {
+            "type": "string",
+            "description": "Пункт отправления",
+            "nullable": true
+          },
+          "arrivalPoint": {
+            "type": "string",
+            "description": "Пункт прибытия",
+            "nullable": true
+          },
+          "passengersCount": {
+            "type": "integer",
+            "description": "Количество перевезённых пассажиров",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false,
+        "description": "DTO для топ рейсов"
+      }
+    }
+  }
+}
