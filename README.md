@@ -18,4 +18,4 @@
    заданного пункта отправления
 
 p.s. 
-it's just demo project, correct version of frontend (lab4) u can seen in [https://github.com/itsecd/enterprise-development/tree/ff21fc18f93e5a0af09bc4256b0a7fa384397f70](this) commit (at least it works)
+it's just demo project, correct version of frontend (lab4) u can seen in [this](https://github.com/itsecd/enterprise-development/tree/ff21fc18f93e5a0af09bc4256b0a7fa384397f70) commit (at least it works)
